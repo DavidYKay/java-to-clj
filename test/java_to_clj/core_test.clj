@@ -1,53 +1,98 @@
 (ns java-to-clj.core-test
   (:require [clojure.test :refer :all]
             [clojure.java.io :as io]
-            ;;[java-to-clj.core :refer []]
-            [java-to-clj.convert :refer [convert-statement]]
             [java-to-clj.parse :refer [parse-block parse-statement]]
             [java-to-clj.protocols :refer [to-clj]]
-            ))
+            )
+  (:import
+   [com.github.javaparser.ast.expr
+    Expression
+    AnnotationExpr
+    ArrayAccessExpr
+    ArrayCreationExpr
+    ArrayInitializerExpr
+    AssignExpr
+    BinaryExpr
+    CastExpr
+    ClassExpr
+    ConditionalExpr
+    EnclosedExpr
+    FieldAccessExpr
+    InstanceOfExpr
+    LambdaExpr
+    LiteralExpr
+    MethodCallExpr
+    MethodReferenceExpr
+    NameExpr
+    ObjectCreationExpr
+    SuperExpr
+    StringLiteralExpr
+    ThisExpr
+    TypeExpr
+    UnaryExpr
+    VariableDeclarationExpr
+    ])
+  )
+
+;;(def expr (-> statement .getExpression))
+
+;;(def variables (-> expr .getVariables))
+;;(def variable (first variables))
+;;variables
+;;(first variables)
+
+;;(to-clj expr)
+
+;;(def initializer (-> variable .getInitializer .get))
+
+;;(to-clj initializer)
+;;(to-clj variable)
+;;(to-clj statement)
+
+(defn innermost-is-class? [e]
+  (loop [cur e]
+    (if (= FieldAccessExpr (class cur))
+      (recur (.getScope cur))
+      (Character/isUpperCase (first (-> cur
+                                        .getName
+                                        .asString))))))
+
+(defmethod to-clj FieldAccessExpr [e]
+  ;;(if (innermost-is-class? e)
+  ;;(class (.getScope e)
+  (.getName e)
+
+  ;;(format "Scope: %s name: %s"
+  ;; (.getScope e)
+  ;;(.getName e)
+  ;;)
+  )
 
 (def block-str (slurp (io/resource "code/Block.java")))
 (def block (parse-block block-str))
 
 (def hello-statement "Geometry coloredMesh = new Geometry (\"ColoredMesh\", cMesh);")
-(def statement (parse-statement hello-statement))
+(def statement (parse-statement "mesh.setMode(Mesh.Mode.Points);"))
+(def expression (.getExpression statement))
+(def arg (-> expression
+             .getArguments
+             first))
 
-statement
+;;expression
 
-(def expr (-> statement
-              .getExpression))
+arg
 
-(def variables
-  (->
-   expr
-   .getVariables))
+(def field-access (.getScope arg))
 
-(def variable (first variables))
+field-access
 
-variables
-(first variables)
+(def inner-scope (.getScope field-access))
 
-(to-clj expr)
+inner-scope
+(-> (.getName inner-scope)
+    .asString)
 
-(def initializer
-  (->
-   variable
-   .getInitializer
-   .get))
+;;(.getName arg)
 
-initializer
+(to-clj expression)
 
-(to-clj initializer)
-
-(to-clj variable)
-(to-clj statement)
-
-(deftest convert
-  (testing "Can convert variable"
-    )
-
-  (testing "Can convert the first line of the block"
-    (is (= "(def ^Geometry coloredMesh (Geometry. \"ColoredMesh\" cMesh))"
-           (convert-statement hello-statement))))
-  )

@@ -37,7 +37,7 @@
 (defmethod to-clj NameExpr [e]
   (-> e
       .getName
-      .asString))
+      to-clj))
 
 (defmethod to-clj Expression [e] :Expression)
 
@@ -61,7 +61,6 @@
 
 (defmethod to-clj EnclosedExpr [e] :EnclosedExpr)
 
-(defmethod to-clj FieldAccessExpr [e] :FieldAccessExpr)
 
 (defmethod to-clj InstanceOfExpr [e] :InstanceOfExpr)
 
@@ -69,7 +68,12 @@
 
 (defmethod to-clj LiteralExpr [e] :LiteralExpr)
 
-(defmethod to-clj MethodCallExpr [e] :MethodCallExpr)
+(defmethod to-clj MethodCallExpr [e]
+  (let [n (.getName e)
+        args (->> (.getArguments e)
+                  (map to-clj))]
+    (format "(.%s %s)" n
+            (str/join " " args))))
 
 (defmethod to-clj MethodReferenceExpr [e] :MethodReferenceExpr)
 

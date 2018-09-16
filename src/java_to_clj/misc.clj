@@ -3,10 +3,14 @@
   [java-to-clj.protocols :refer [to-clj]])
   (:import
    [com.github.javaparser.ast
-    body.VariableDeclarator]
+    body.VariableDeclarator
+    expr.SimpleName
+    ]
    ))
-
 (defmethod to-clj String [s] s)
+
+(defmethod to-clj SimpleName [x]
+  (.asString x))
 
 (defmethod to-clj VariableDeclarator [vd]
   (let [n (.getName vd)
