@@ -12,8 +12,8 @@
 
   (POST "/" {:keys [java]}
         ;; TODO: grab original from POST
-        (views/main {:java java
-                     :clj (convert-main java)}))
+        (views/main :java java
+                     :clj (convert-main java)))
   (route/not-found "<h1>Page not found</h1>"))
 
 

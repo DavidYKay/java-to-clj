@@ -19,4 +19,4 @@
       to-clj))
 
 (defn convert-main [s]
-  (convert-block s))
+  (convert-block (str "{\n" s "\n}")))

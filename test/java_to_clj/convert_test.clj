@@ -1,11 +1,12 @@
 (ns java-to-clj.convert-test
-  (:require [java-to-clj.convert :as sut :refer [convert-block convert-statement]]
+  (:require [java-to-clj.convert :as sut :refer [convert-block convert-main convert-statement]]
             [java-to-clj.parse :refer [parse-block]]
             [clojure.java.io :as io]
             [clojure.test :as t :refer :all]
             [clojure.string :as str]))
 
 (def block-str (slurp (io/resource "code/Block.java")))
+(def block-no-braces (slurp (io/resource "code/BlockNoBraces.java")))
 (def block-output (str/trim (slurp (io/resource "code/block.clj"))))
 
 (deftest convert
@@ -22,6 +23,8 @@
     (is (= block-output
            (convert-block block-str))))
 
-
+  (testing "Can convert a block without braces"
+    (is (= block-output
+           (convert-main block-no-braces))))
   )
 
