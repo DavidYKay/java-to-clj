@@ -16,7 +16,6 @@
    )
   )
 
-
 (defmethod to-clj String [s] s)
 
 (defmethod to-clj VariableDeclarator [vd]

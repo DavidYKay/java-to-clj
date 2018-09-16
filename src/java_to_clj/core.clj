@@ -1,7 +1,8 @@
 (ns java-to-clj.core
   (:require [clojure.java.io :as io]
             [clojure.string :as str]
-            [java-to-clj.convert :refer [to-clj]]
+            [java-to-clj.convert]
+            [java-to-clj.protocols :refer [to-clj]]
             [java-to-clj.parse :refer [parse-block parse-statement]]
             )
   (:import
@@ -13,10 +14,13 @@
 (def block-str (slurp (io/resource "code/Block.java")))
 (def raw-block-str (slurp (io/resource "code/BlockWithDots.java")))
 
+(def hello-expression "(x == 1)")
+(def hello-statement "Geometry coloredMesh = new Geometry (\"ColoredMesh\", cMesh);")
 
-(def block (parse-block))
+(def block (parse-block block-str))
 
-(def statement (parse-statement))
+;;(def statement (parse-statement "Geometry coloredMesh = new Geometry (\"ColoredMesh\", cMesh);"))
+(def statement (parse-statement hello-statement))
 
 (def statements (->> block
                      .getChildNodes))
@@ -37,11 +41,7 @@ variable-declarator
 
 initializer
 
-;;(variable-declarator-to-clj variable-declarator)
-
-;;.getChildNodes
-
+;;(to-clj variable-declarator)
 ;;(convert-block block)
 ;;(->> (.getStatements block) first)
-
-;;(initializer-to-clj initializer)
+;;(to-clj initializer)

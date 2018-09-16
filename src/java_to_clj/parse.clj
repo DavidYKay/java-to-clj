@@ -1,5 +1,4 @@
 (ns java-to-clj.parse
-
   (:import
    [com.github.javaparser JavaParser]
    [com.github.javaparser.ast
@@ -8,21 +7,19 @@
    [java.util Optional]
    ))
 
-(def hello-class "class A { }")
 
 (defn hello-parse []
-  (let [^CompilationUnit compilationUnit (JavaParser/parse hello-class)
+  (let [hello-class "class A { }"
+        ^CompilationUnit compilationUnit (JavaParser/parse hello-class)
         ^Optional a (.getClassByName compilationUnit "A")]
     (when (.isPresent a)
       (.get a))))
 
-(defn parse-statement []
-  (let [s "Geometry coloredMesh = new Geometry (\"ColoredMesh\", cMesh);"]
-    (JavaParser/parseStatement s)))
+(defn parse-statement [s]
+  (JavaParser/parseStatement s))
 
-(defn parse-expression []
-  (let [s "(x == 1)"]
-    (JavaParser/parseExpression s)))
+(defn parse-expression [s]
+  (JavaParser/parseExpression s))
 
 (defn parse-block ^BlockStmt [s]
   (JavaParser/parseBlock s))

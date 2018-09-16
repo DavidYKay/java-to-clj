@@ -24,6 +24,7 @@
     NameExpr
     ObjectCreationExpr
     SuperExpr
+    StringLiteralExpr
     ThisExpr
     TypeExpr
     UnaryExpr
