@@ -1,7 +1,10 @@
 (ns java-to-clj.convert
   (:require
    [clojure.string :as str]
-   [java-to-clj.expressions :refer [to-str]])
+   [java-to-clj.expressions]
+   [java-to-clj.protocols :refer [to-clj]]
+   [java-to-clj.statements]
+   )
   (:import
    [com.github.javaparser JavaParser]
    [java.util Optional]
@@ -13,20 +16,8 @@
    )
   )
 
-(defmulti to-clj class)
 
 (defmethod to-clj String [s] s)
-
-(defmethod to-clj BlockStmt [e]
-
-  )
-
-(defmethod to-clj Expression [e] 
-  (let [t (.getType e)
-        args (->> (.getArguments e)
-                  (map to-str))]
-    (format "(%s. %s)" t
-            (str/join " " args))))
 
 (defmethod to-clj VariableDeclarator [vd]
   (let [n (.getName vd)
