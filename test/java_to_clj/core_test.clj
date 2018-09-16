@@ -60,12 +60,12 @@
 (defmethod to-clj FieldAccessExpr [e]
   ;;(if (innermost-is-class? e)
   ;;(class (.getScope e)
-  (.getName e)
 
-  ;;(format "Scope: %s name: %s"
-  ;; (.getScope e)
-  ;;(.getName e)
-  ;;)
+  (str
+   (.getScope e)
+   "."
+       (.getName e)
+       )
   )
 
 (def block-str (slurp (io/resource "code/Block.java")))

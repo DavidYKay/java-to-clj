@@ -61,7 +61,6 @@
 
 (defmethod to-clj EnclosedExpr [e] :EnclosedExpr)
 
-
 (defmethod to-clj InstanceOfExpr [e] :InstanceOfExpr)
 
 (defmethod to-clj LambdaExpr [e] :LambdaExpr)
@@ -69,9 +68,13 @@
 (defmethod to-clj LiteralExpr [e] :LiteralExpr)
 
 (defmethod to-clj MethodCallExpr [e]
-  (let [n (.getName e)
+  (let [s (-> e .getScope)
+        n (.getName e)
         args (->> (.getArguments e)
-                  (map to-clj))]
+                  (map to-clj))
+        args (if (.isPresent s)
+               (conj args (to-clj (.get s)))
+               args)]
     (format "(.%s %s)" n
             (str/join " " args))))
 
