@@ -3,11 +3,8 @@
   [java-to-clj.protocols :refer [to-clj]])
   (:import
    [com.github.javaparser.ast
-    body.VariableDeclarator
-    ]
-   )
-  )
-
+    body.VariableDeclarator]
+   ))
 
 (defmethod to-clj String [s] s)
 
