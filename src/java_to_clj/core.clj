@@ -15,10 +15,7 @@
 (def hello-expression "class A { }")
 
 (defn parse-statement []
-  (let [
-        ;s "int x = 5;"
-        s "Geometry coloredMesh = new Geometry (\"ColoredMesh\", cMesh);"
-        ]
+  (let [s "Geometry coloredMesh = new Geometry (\"ColoredMesh\", cMesh);"]
     (JavaParser/parseStatement s)))
 
 (defn parse-expression []
@@ -35,44 +32,29 @@
     (when (.isPresent a)
       (.get a))))
 
-
-(defn convert-block [block]
-  )
-
 (def block (parse-block))
 
 ;; VariableDeclarationStatement
 (def statement (parse-statement))
+
+(def statements (->> block
+                     .getChildNodes))
+
+statements
 
 (def variable-declarator
   (->> statement
        .getChildNodes
        first
        .getVariables
-       first
-       ))
+       first))
+
+variable-declarator
 
 (def initializer (-> (.getInitializer variable-declarator)
                      .get))
 
 initializer
-
-(defn initializer-to-clj [i]
-  (let [t (.getType i)
-        args (->> (.getArguments i)
-                  (map to-str))]
-    (format "(%s. %s)" t
-            (str/join " " args))))
-
-(defn variable-declarator-to-clj [vd]
-  (let [n (.getName vd)
-        ;; t (.getType vd)
-        i (.getInitializer vd)
-        i (if (.isPresent i)
-            (initializer-to-clj (.get i))
-            nil)]
-    (format "^%s (%s. %s)" n n i)
-    ))
 
 ;;(variable-declarator-to-clj variable-declarator)
 
@@ -81,5 +63,4 @@ initializer
 ;;(convert-block block)
 ;;(->> (.getStatements block) first)
 
-
-(initializer-to-clj initializer)
+;;(initializer-to-clj initializer)

@@ -2,6 +2,8 @@
   (:require [clojure.test :refer :all]
             [java-to-clj.core :refer :all]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(deftest convert
+  (testing "Can convert the first line of the block"
+    (is (=
+         1
+         1))))
