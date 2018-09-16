@@ -2,7 +2,7 @@
   (:require [clojure.test :refer :all]
             [clojure.java.io :as io]
             ;;[java-to-clj.core :refer []]
-            [java-to-clj.convert]
+            [java-to-clj.convert :refer [convert-statement]]
             [java-to-clj.parse :refer [parse-block parse-statement]]
             [java-to-clj.protocols :refer [to-clj]]
             ))
@@ -13,7 +13,41 @@
 (def hello-statement "Geometry coloredMesh = new Geometry (\"ColoredMesh\", cMesh);")
 (def statement (parse-statement hello-statement))
 
-(deftest convert
-  (testing "Can convert the first line of the block"
-    (is (= (to-clj statement)
-           ""))))
+statement
+
+(def expr (-> statement
+              .getExpression))
+
+(def variables
+  (->
+   expr
+   .getVariables))
+
+(def variable (first variables))
+
+variables
+(first variables)
+
+(to-clj expr)
+
+(def initializer
+  (->
+   variable
+   .getInitializer
+   .get))
+
+initializer
+
+(to-clj initializer)
+
+(to-clj variable)
+(to-clj statement)
+
+;;(deftest convert
+;;  (testing "Can convert variable"
+;;    )
+;;
+;;  #_(testing "Can convert the first line of the block"
+;;    (is (= "(def coloredMesh (.Geometry \"ColoredMesh\" cMesh)"
+;;           (convert-statement hello-statement))))
+;;  )

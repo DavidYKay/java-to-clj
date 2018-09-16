@@ -39,56 +39,56 @@
       .getName
       .asString))
 
-(defmethod to-clj Expression [e]
+(defmethod to-clj Expression [e] :Expression)
+
+(defmethod to-clj AnnotationExpr [e] :AnnotationExpr)
+
+(defmethod to-clj ArrayAccessExpr [e] :ArrayAccessExpr)
+
+(defmethod to-clj ArrayCreationExpr [e] :ArrayCreationExpr)
+
+(defmethod to-clj ArrayInitializerExpr [e] :ArrayInitializerExpr)
+
+(defmethod to-clj AssignExpr [e] :AssignExpr)
+
+(defmethod to-clj BinaryExpr [e] :BinaryExpr)
+
+(defmethod to-clj CastExpr [e] :CastExpr)
+
+(defmethod to-clj ClassExpr [e] :ClassExpr)
+
+(defmethod to-clj ConditionalExpr [e] :ConditionalExpr)
+
+(defmethod to-clj EnclosedExpr [e] :EnclosedExpr)
+
+(defmethod to-clj FieldAccessExpr [e] :FieldAccessExpr)
+
+(defmethod to-clj InstanceOfExpr [e] :InstanceOfExpr)
+
+(defmethod to-clj LambdaExpr [e] :LambdaExpr)
+
+(defmethod to-clj LiteralExpr [e] :LiteralExpr)
+
+(defmethod to-clj MethodCallExpr [e] :MethodCallExpr)
+
+(defmethod to-clj MethodReferenceExpr [e] :MethodReferenceExpr)
+
+(defmethod to-clj ObjectCreationExpr [e]
   (let [t (.getType e)
         args (->> (.getArguments e)
                   (map to-clj))]
     (format "(%s. %s)" t
             (str/join " " args))))
 
-(defmethod to-clj AnnotationExpr [e] nil)
+(defmethod to-clj SuperExpr [e] :SuperExpr)
 
-(defmethod to-clj ArrayAccessExpr [e] nil)
+(defmethod to-clj ThisExpr [e] :ThisExpr)
 
-(defmethod to-clj ArrayCreationExpr [e] nil)
+(defmethod to-clj TypeExpr [e] :TypeExpr)
 
-(defmethod to-clj ArrayInitializerExpr [e] nil)
+(defmethod to-clj UnaryExpr [e] :UnaryExpr)
 
-(defmethod to-clj AssignExpr [e] nil)
-
-(defmethod to-clj BinaryExpr [e] nil)
-
-(defmethod to-clj CastExpr [e] nil)
-
-(defmethod to-clj ClassExpr [e] nil)
-
-(defmethod to-clj ConditionalExpr [e] nil)
-
-(defmethod to-clj EnclosedExpr [e] nil)
-
-(defmethod to-clj FieldAccessExpr [e] nil)
-
-(defmethod to-clj InstanceOfExpr [e] nil)
-
-(defmethod to-clj LambdaExpr [e] nil)
-
-(defmethod to-clj LiteralExpr [e] nil)
-
-(defmethod to-clj MethodCallExpr [e] nil)
-
-(defmethod to-clj MethodReferenceExpr [e] nil)
-
-(defmethod to-clj NameExpr [e] nil)
-
-(defmethod to-clj ObjectCreationExpr [e] nil)
-
-(defmethod to-clj SuperExpr [e] nil)
-
-(defmethod to-clj ThisExpr [e] nil)
-
-(defmethod to-clj TypeExpr [e] nil)
-
-(defmethod to-clj UnaryExpr [e] nil)
-
-(defmethod to-clj VariableDeclarationExpr [e] nil)
+(defmethod to-clj VariableDeclarationExpr [e]
+  (str/join " "
+            (map to-clj (.getVariables e))))
 

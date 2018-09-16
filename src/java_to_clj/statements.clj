@@ -37,66 +37,46 @@
    )
   )
 
-(defmethod to-clj AssertStmt [s]
-  nil)
+(defmethod to-clj AssertStmt [s] :AssertStmt)
 
-(defmethod to-clj BlockStmt [s]
-  nil)
+(defmethod to-clj BlockStmt [s] :BlockStmt)
 
-(defmethod to-clj BreakStmt [s]
-  nil)
+(defmethod to-clj BreakStmt [s] :BreakStmt)
 
-(defmethod to-clj ContinueStmt [s]
-  nil)
+(defmethod to-clj ContinueStmt [s] :CoStmtnil)
 
-(defmethod to-clj DoStmt [s]
-  nil)
+(defmethod to-clj DoStmt [s] :DoStmt)
 
-(defmethod to-clj EmptyStmt [s]
-  nil)
+(defmethod to-clj EmptyStmt [s] :EmptyStmt)
 
-(defmethod to-clj ExplicitConstructorInvocationStmt [s]
-  nil)
+(defmethod to-clj ExplicitConstructorInvocationStmt [s] :ExplicitCoInvocationStmtnil)
 
 (defmethod to-clj ExpressionStmt [s]
-  nil)
+  (to-clj (.getExpression s)))
 
-(defmethod to-clj ForeachStmt [s]
-  nil)
+(defmethod to-clj ForeachStmt [s] :ForeachStmt)
 
-(defmethod to-clj ForStmt [s]
-  nil)
+(defmethod to-clj ForStmt [s] :ForStmt)
 
-(defmethod to-clj IfStmt [s]
-  nil)
+(defmethod to-clj IfStmt [s] :IfStmt)
 
-(defmethod to-clj LabeledStmt [s]
-  nil)
+(defmethod to-clj LabeledStmt [s] :LabeledStmt)
 
-(defmethod to-clj LocalClassDeclarationStmt [s]
-  nil)
+(defmethod to-clj LocalClassDeclarationStmt [s] :LocalClassDeclaration)
 
-(defmethod to-clj ReturnStmt [s]
-  nil)
+(defmethod to-clj ReturnStmt [s] :ReturnStmt)
 
-(defmethod to-clj SwitchEntryStmt [s]
-  nil)
+(defmethod to-clj SwitchEntryStmt [s] :SwitchEntryStmt)
 
-(defmethod to-clj SwitchStmt [s]
-  nil)
+(defmethod to-clj SwitchStmt [s] :SwitchStmt)
 
-(defmethod to-clj SynchronizedStmt [s]
-  nil)
+(defmethod to-clj SynchronizedStmt [s] :SynhcronizedStmt)
 
-(defmethod to-clj ThrowStmt [s]
-  nil)
+(defmethod to-clj ThrowStmt [s] :ThrowStmt)
 
-(defmethod to-clj TryStmt [s]
-  nil)
+(defmethod to-clj TryStmt [s] :TryStmt)
 
-(defmethod to-clj UnparsableStmt [s]
-  nil)
+(defmethod to-clj UnparsableStmt [s] :UnparsableStmt)
 
-(defmethod to-clj WhileStmt [s]
-  nil)
+(defmethod to-clj WhileStmt [s] :WhileStmt)
 
