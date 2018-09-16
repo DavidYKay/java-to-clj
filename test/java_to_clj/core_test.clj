@@ -43,11 +43,11 @@ initializer
 (to-clj variable)
 (to-clj statement)
 
-;;(deftest convert
-;;  (testing "Can convert variable"
-;;    )
-;;
-;;  #_(testing "Can convert the first line of the block"
-;;    (is (= "(def coloredMesh (.Geometry \"ColoredMesh\" cMesh)"
-;;           (convert-statement hello-statement))))
-;;  )
+(deftest convert
+  (testing "Can convert variable"
+    )
+
+  (testing "Can convert the first line of the block"
+    (is (= "(def ^Geometry coloredMesh (Geometry. \"ColoredMesh\" cMesh))"
+           (convert-statement hello-statement))))
+  )

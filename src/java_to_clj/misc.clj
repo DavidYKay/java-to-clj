@@ -13,9 +13,9 @@
 
 (defmethod to-clj VariableDeclarator [vd]
   (let [n (.getName vd)
-        ;; t (.getType vd)
+        t (.getType vd)
         i (.getInitializer vd)
         i (if (.isPresent i)
             (to-clj (.get i))
             nil)]
-    (format "^%s (%s. %s)" n n i)))
+    (format "(def ^%s %s %s)" t n i)))
