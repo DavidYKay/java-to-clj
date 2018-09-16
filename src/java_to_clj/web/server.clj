@@ -17,6 +17,5 @@
 
   (route/not-found "<h1>Page not found</h1>"))
 
-
 (def app
   (wrap-params handler))
