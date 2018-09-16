@@ -10,10 +10,16 @@
   (GET "/" []
        (views/main))
 
-  (POST "/" {:keys [java]}
+  ;;(POST "/" {:keys [java]} :params
+  (POST "/" {params :params}
+        (let [{java "java"} params
+              clj (convert-main java)]
+          (println "got params: " params)
+          (println "java was: " java)
+          (println "clj conversion was: " clj)
         ;; TODO: grab original from POST
-        (views/main :java java
-                     :clj (convert-main java)))
+        (views/main :java java :clj clj)))
+
   (route/not-found "<h1>Page not found</h1>"))
 
 
