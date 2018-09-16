@@ -1,7 +1,8 @@
 (ns java-to-clj.statements
   (:require
    [java-to-clj.protocols :refer [to-clj]]
-   )
+
+   [clojure.string :as str])
   (:import
    [com.github.javaparser JavaParser]
    [java.util Optional]
@@ -39,7 +40,10 @@
 
 (defmethod to-clj AssertStmt [s] :AssertStmt)
 
-(defmethod to-clj BlockStmt [s] :BlockStmt)
+(defmethod to-clj BlockStmt [s]
+  (str/join "\n" (->> s
+                     .getChildNodes
+                     (map to-clj))))
 
 (defmethod to-clj BreakStmt [s] :BreakStmt)
 
