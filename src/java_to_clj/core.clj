@@ -4,7 +4,6 @@
             [java-to-clj.convert]
             [java-to-clj.protocols :refer [to-clj]]
             [java-to-clj.parse :refer [parse-block parse-statement]]
-            [seesaw.core :refer [invoke-later pack! show! frame]]
             )
   (:import
    [com.github.javaparser JavaParser]
@@ -42,13 +41,6 @@
 ;;initializer
 
 
-(defn -main [& args]
-  (invoke-later
-   (-> (frame :title "Hello",
-              :content "Hello, Seesaw",
-              :on-close :exit)
-       pack!
-       show!)))
 
 ;;(to-clj variable-declarator)
 ;;(convert-block block)

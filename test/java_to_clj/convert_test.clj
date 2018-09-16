@@ -26,5 +26,9 @@
   (testing "Can convert a block without braces"
     (is (= block-output
            (convert-main block-no-braces))))
-  )
+
+  (testing "Can convert a block without braces"
+    (is (= "(aset vertices 0 (Vector3f. 0 0 0))"
+           (convert-statement "vertices[0] = new Vector3f(0,0,0);")
+           ))))
 
