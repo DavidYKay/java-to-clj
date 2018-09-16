@@ -61,7 +61,7 @@
                           .getName
                           .asString)))))
 
-(defn join-components [cs]
+#_(defn join-components [cs]
   (loop [cs cs
          accum ""]
     (if (empty? cs)
@@ -80,22 +80,17 @@
     (let [name (.asString (.getName cur))]
       (if (= FieldAccessExpr (class cur))
         (recur (.getScope cur)
-               (into accum
-                     (if (name-is-class? name)
-                       (vector name \$)
-                       (vector name \/))))
-        (-> (into accum [name])
-             reverse
-             str/join)))))
+               (conj accum name
+                     ;; (if (name-is-class? name) (vector name ) (vector name ))
+                     ))
+        (let [elems (reverse (conj accum name))]
+          (str (str/join "$" (butlast elems)) "/" (last elems)))))))
 
 (defmethod to-clj FieldAccessExpr [e]
   ;;(if (innermost-is-class? e)
-  ;;  (format "ClassScope")
-    (str
-     (.getScope e)
-     "."
-     (.getName e)
-     ))
+  (dollar-sign e)
+  ;; TODO: support regular field accesses
+  )
 
 
 (def block-str (slurp (io/resource "code/Block.java")))
@@ -125,5 +120,5 @@ arg
 
 ;;(.getName arg)
 
-;;(to-clj expression)
+;(to-clj expression)
 
