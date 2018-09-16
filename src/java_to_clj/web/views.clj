@@ -17,12 +17,12 @@
          [:div.column
           [:span {:class "tag"} "Java"]
           [:textarea
-           {:wrap "soft" :cols "50" :rows "5" :name "java"}
+           {:wrap "soft" :cols "50" :rows "20" :name "java"}
            java]]
          [:div.column
           [:span {:class "tag"} "Clojure"]
           [:textarea
-           {:wrap "soft" :cols "50" :rows "5" :name "clj"}
+           {:wrap "soft" :cols "50" :rows "20" :name "clj"}
            clj]]]
         [:button {:class "button"
                   :value "Submit"
