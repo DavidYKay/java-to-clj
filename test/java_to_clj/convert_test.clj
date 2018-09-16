@@ -30,5 +30,12 @@
   (testing "Can convert a block without braces"
     (is (= "(aset vertices 0 (Vector3f. 0 0 0))"
            (convert-statement "vertices[0] = new Vector3f(0,0,0);")
-           ))))
+           )))
+
+  (testing "Can initialize a Java array"
+    (is (= "(def indexes (into-array [2 0 1 1 3 2]))"
+           (convert-statement "int [] indexes = { 2,0,1, 1,3,2 };")
+           )))
+
+  )
 
