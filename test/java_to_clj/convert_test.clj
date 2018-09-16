@@ -6,6 +6,7 @@
             [clojure.string :as str]))
 
 (def block-str (slurp (io/resource "code/Block.java")))
+(def android-prefs (slurp (io/resource "code/AndroidPrefs.java")))
 (def block-no-braces (slurp (io/resource "code/BlockNoBraces.java")))
 (def block-output (str/trim (slurp (io/resource "code/block.clj"))))
 
@@ -36,6 +37,19 @@
     (is (= "(def indexes (into-array [2 0 1 1 3 2]))"
            (convert-statement "int [] indexes = { 2,0,1, 1,3,2 };")
            )))
+
+  (testing "Can convert an assignment expression"
+    (is (= "(def ^int x 5)"
+           (convert-statement "int x = 5;"))))
+
+  (testing "Can convert a setBuffer call"
+    (is (= "(.setBuffer mesh Type/Position 3 (BufferUtils/createFloatBuffer vertices))"
+           (convert-statement "mesh.setBuffer(Type.Position, 3, BufferUtils.createFloatBuffer(vertices));"))))
+
+  (testing "Can convert an android example"
+    (is (= "(.setBuffer mesh Type/Position 3 (BufferUtils/createFloatBuffer vertices))"
+           (convert-main android-prefs))))
+
 
   )
 
