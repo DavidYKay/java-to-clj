@@ -6,4 +6,7 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  ;; https://mvnrepository.com/artifact/com.github.javaparser/javaparser-core
                  [com.github.javaparser/javaparser-core "3.6.20"]
-                 ])
+                 ]
+
+  :repl-options {:init-ns java-to-clj.core}
+  )
