@@ -17,3 +17,6 @@
   (-> s
       parse-block
       to-clj))
+
+(defn convert-main [s]
+  (convert-block s))

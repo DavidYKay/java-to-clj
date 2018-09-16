@@ -9,8 +9,7 @@
    [com.github.javaparser.ast
     body.VariableDeclarator
     expr.Expression
-    stmt.BlockStmt
-    ]
+    stmt.BlockStmt]
 
    [com.github.javaparser.ast.stmt
     AssertStmt
@@ -33,10 +32,7 @@
     ThrowStmt
     TryStmt
     UnparsableStmt
-    WhileStmt
-    ]
-   )
-  )
+    WhileStmt]))
 
 (defmethod to-clj AssertStmt [s] :AssertStmt)
 

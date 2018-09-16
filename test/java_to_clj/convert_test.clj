@@ -5,9 +5,6 @@
             [clojure.test :as t :refer :all]
             [clojure.string :as str]))
 
-;; "Mesh.Mode.Points"
-;; Mesh$Mode/Points
-
 (def block-str (slurp (io/resource "code/Block.java")))
 (def block-output (str/trim (slurp (io/resource "code/block.clj"))))
 
