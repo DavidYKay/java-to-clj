@@ -50,16 +50,7 @@
 ;;(to-clj variable)
 ;;(to-clj statement)
 
-(defn name-is-class? [s]
-  (Character/isUpperCase (first s)))
 
-(defn innermost-is-class? [e]
-  (loop [cur e]
-    (if (= FieldAccessExpr (class cur))
-      (recur (.getScope cur))
-      (name-is-class? (-> cur
-                          .getName
-                          .asString)))))
 
 #_(defn join-components [cs]
   (loop [cs cs
@@ -74,39 +65,32 @@
                       :field "/")
                     name))))))
 
-(defn dollar-sign [e]
-  (loop [cur e
-         accum []]
-    (let [name (.asString (.getName cur))]
-      (if (= FieldAccessExpr (class cur))
-        (recur (.getScope cur)
-               (conj accum name
-                     ;; (if (name-is-class? name) (vector name ) (vector name ))
-                     ))
-        (let [elems (reverse (conj accum name))]
-          (str (str/join "$" (butlast elems)) "/" (last elems)))))))
-
-(defmethod to-clj FieldAccessExpr [e]
-  ;;(if (innermost-is-class? e)
-  (dollar-sign e)
-  ;; TODO: support regular field accesses
-  )
-
-
-(def block-str (slurp (io/resource "code/Block.java")))
-(def block (parse-block block-str))
 
 (def hello-statement "Geometry coloredMesh = new Geometry (\"ColoredMesh\", cMesh);")
-(def statement (parse-statement "mesh.setMode(Mesh.Mode.Points);"))
+
+(def statement (parse-statement "int [] indexes = { 2,0,1, 1,3,2 };"))
+
+statement
+
 (def expression (.getExpression statement))
-(def arg (-> expression
-             .getArguments
-             first))
 
-;;expression
 
-arg
-(dollar-sign arg)
+expression
+
+(def v (-> expression .getVariables first))
+
+(def initializer (.get (.getInitializer v)))
+
+(def literal
+(-> initializer
+    .getValues
+    first))
+
+literal
+
+;;(def arg (-> expression .getArguments ))
+
+
 
 ;;(def field-access (.getScope arg))
 ;;
@@ -121,4 +105,3 @@ arg
 ;;(.getName arg)
 
 ;(to-clj expression)
-

@@ -28,13 +28,14 @@
     (is (= block-output
            (convert-main block-no-braces))))
 
-  (testing "Can convert a block without braces"
+  (testing "Can correctly set an array value"
     (is (= "(aset vertices 0 (Vector3f. 0 0 0))"
            (convert-statement "vertices[0] = new Vector3f(0,0,0);")
            )))
 
-  (testing "Can initialize a Java array"
-    (is (= "(def indexes (into-array [2 0 1 1 3 2]))"
+  (testing
+      "Can initialize a Java array"
+    (is (= "(def ^int[] indexes (into-array [2 0 1 1 3 2]))"
            (convert-statement "int [] indexes = { 2,0,1, 1,3,2 };")
            )))
 
@@ -46,10 +47,12 @@
     (is (= "(.setBuffer mesh Type/Position 3 (BufferUtils/createFloatBuffer vertices))"
            (convert-statement "mesh.setBuffer(Type.Position, 3, BufferUtils.createFloatBuffer(vertices));"))))
 
-  (testing "Can convert an android example"
-    (is (= "(.setBuffer mesh Type/Position 3 (BufferUtils/createFloatBuffer vertices))"
-           (convert-main android-prefs))))
+  ;; (testing "Can convert an android example" (is (= "(.setBuffer mesh Type/Position 3 (BufferUtils/createFloatBuffer vertices))" (convert-main android-prefs))))
+  )
 
+#_(deftest ^:test-refresh/focus focused
+
+    ;;(testing "Can correctly set an int value" (is (= "(def x 5)" (convert-statement "x = 5;"))))
 
   )
 

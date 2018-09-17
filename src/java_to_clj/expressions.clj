@@ -29,15 +29,26 @@
     TypeExpr
     UnaryExpr
     VariableDeclarationExpr
+    BooleanLiteralExpr
+    LiteralStringValueExpr
+    CharLiteralExpr
+    DoubleLiteralExpr
+    IntegerLiteralExpr
+    LongLiteralExpr
     ]))
 
-(defmethod to-clj StringLiteralExpr [e]
-  (str \" (.asString e) \"))
+(defn- escape-str [s]
+  (str \" s \"))
 
-(defmethod to-clj NameExpr [e]
-  (-> e
-      .getName
-      to-clj))
+(defmethod to-clj BooleanLiteralExpr [e] (.getValue e))
+(defmethod to-clj LiteralStringValueExpr [e] (escape-str (.getValue e)))
+(defmethod to-clj CharLiteralExpr [e] (.asChar e))
+(defmethod to-clj DoubleLiteralExpr [e] (.asDouble e))
+(defmethod to-clj IntegerLiteralExpr [e] (.asInt e))
+(defmethod to-clj LongLiteralExpr [e] (.asLong e))
+(defmethod to-clj StringLiteralExpr [e] (escape-str (.asString e)))
+
+(defmethod to-clj NameExpr [e] (-> e .getName to-clj))
 
 (defmethod to-clj Expression [e] :Expression)
 
@@ -47,7 +58,10 @@
 
 (defmethod to-clj ArrayCreationExpr [e] :ArrayCreationExpr)
 
-(defmethod to-clj ArrayInitializerExpr [e] :ArrayInitializerExpr)
+(defmethod to-clj ArrayInitializerExpr [e]
+  (format "(into-array [%s])"
+          (str/join " " (->> (.getValues e)
+                             (map to-clj)))))
 
 (defmethod to-clj AssignExpr [e] :AssignExpr)
 
@@ -99,3 +113,32 @@
   (str/join " "
             (map to-clj (.getVariables e))))
 
+;; TODO: move these utility fns
+(defn name-is-class? [s]
+  (Character/isUpperCase (first s)))
+
+(defn innermost-is-class? [e]
+  (loop [cur e]
+    (if (= FieldAccessExpr (class cur))
+      (recur (.getScope cur))
+      (name-is-class? (-> cur
+                          .getName
+                          .asString)))))
+
+(defn- dollar-sign [e]
+  (loop [cur e
+         accum []]
+    (let [name (.asString (.getName cur))]
+      (if (= FieldAccessExpr (class cur))
+        (recur (.getScope cur)
+               (conj accum name
+                     ;; (if (name-is-class? name) (vector name ) (vector name ))
+                     ))
+        (let [elems (reverse (conj accum name))]
+          (str (str/join "$" (butlast elems)) "/" (last elems)))))))
+
+(defmethod to-clj FieldAccessExpr [e]
+  ;;(if (innermost-is-class? e)
+  (dollar-sign e)
+  ;; TODO: support regular field accesses
+  )
