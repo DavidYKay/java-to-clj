@@ -50,9 +50,12 @@
   ;; (testing "Can convert an android example" (is (= "(.setBuffer mesh Type/Position 3 (BufferUtils/createFloatBuffer vertices))" (convert-main android-prefs))))
   )
 
-#_(deftest ^:test-refresh/focus focused
+(deftest ^:test-refresh/focus focused
 
     ;;(testing "Can correctly set an int value" (is (= "(def x 5)" (convert-statement "x = 5;"))))
 
+    (testing "Can convert a throw statement"
+      (is (= "(throw (RuntimeException. \"Failed to create the GLFW window\"))"
+             (convert-statement "throw new RuntimeException(\"Failed to create the GLFW window\");"))))
   )
 

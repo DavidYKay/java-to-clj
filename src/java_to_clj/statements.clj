@@ -72,7 +72,11 @@
 
 (defmethod to-clj SynchronizedStmt [s] :SynhcronizedStmt)
 
-(defmethod to-clj ThrowStmt [s] :ThrowStmt)
+(defmethod to-clj ThrowStmt [s]
+  (let [e (.getExpression s)]
+    (println "Throwing E: " e)
+    (format "(throw %s)"
+            (to-clj e))))
 
 (defmethod to-clj TryStmt [s] :TryStmt)
 
