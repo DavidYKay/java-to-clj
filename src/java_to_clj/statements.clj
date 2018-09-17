@@ -78,7 +78,15 @@
     (format "(throw %s)"
             (to-clj e))))
 
-(defmethod to-clj TryStmt [s] :TryStmt)
+(defmethod to-clj TryStmt [s]
+  ;; NodeList<CatchClause> 	getCatchClauses() 
+  ;; Optional<BlockStmt> 	getFinallyBlock() 
+  ;; TryStmtMetaModel 	getMetaModel() 
+  ;; NodeList<Expression> 	getResources()
+
+  :TryStmt
+
+  )
 
 (defmethod to-clj UnparsableStmt [s] :UnparsableStmt)
 

@@ -28,10 +28,6 @@
     (is (= block-output
            (convert-main block-no-braces))))
 
-  (testing "Can correctly set an array value"
-    (is (= "(aset vertices 0 (Vector3f. 0 0 0))"
-           (convert-statement "vertices[0] = new Vector3f(0,0,0);")
-           )))
 
   (testing
       "Can initialize a Java array"
@@ -47,15 +43,27 @@
     (is (= "(.setBuffer mesh Type/Position 3 (BufferUtils/createFloatBuffer vertices))"
            (convert-statement "mesh.setBuffer(Type.Position, 3, BufferUtils.createFloatBuffer(vertices));"))))
 
+  (testing "Can convert a throw statement"
+    (is (= "(throw (RuntimeException. \"Failed to create the GLFW window\"))"
+           (convert-statement "throw new RuntimeException(\"Failed to create the GLFW window\");"))))
+
+  ;;(testing "Can convert an if statement"
+  ;;  (is (= ""
+  ;;         (convert-statement
+  ;;          if (x == 5) {
+
+  ;;                    }
+  ;;          ));"))))
+
   ;; (testing "Can convert an android example" (is (= "(.setBuffer mesh Type/Position 3 (BufferUtils/createFloatBuffer vertices))" (convert-main android-prefs))))
   )
 
-(deftest ^:test-refresh/focus focused
+#_(deftest ^:test-refresh/focus focused
 
     ;;(testing "Can correctly set an int value" (is (= "(def x 5)" (convert-statement "x = 5;"))))
 
-    (testing "Can convert a throw statement"
-      (is (= "(throw (RuntimeException. \"Failed to create the GLFW window\"))"
-             (convert-statement "throw new RuntimeException(\"Failed to create the GLFW window\");"))))
   )
 
+;;(testing "Can correctly set an array value"
+;;  (is (= "(aset vertices 0 (Vector3f. 0 0 0))"
+;;         (convert-statement "vertices[0] = new Vector3f(0,0,0);"))))
