@@ -32,8 +32,7 @@
   (testing
       "Can initialize a Java array"
     (is (= "(def ^int[] indexes (into-array [2 0 1 1 3 2]))"
-           (convert-statement "int [] indexes = { 2,0,1, 1,3,2 };")
-           )))
+           (convert-statement "int [] indexes = { 2,0,1, 1,3,2 };"))))
 
   (testing "Can convert an assignment expression"
     (is (= "(def ^int x 5)"
@@ -46,7 +45,6 @@
   (testing "Can convert a throw statement"
     (is (= "(throw (RuntimeException. \"Failed to create the GLFW window\"))"
            (convert-statement "throw new RuntimeException(\"Failed to create the GLFW window\");"))))
-
 
   (testing "Can convert a binary expression"
     (is (= "(println \"Hello LWJGL\" (Version/getVersion) \"!\")"
