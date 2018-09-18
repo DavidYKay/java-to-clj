@@ -47,6 +47,11 @@
     (is (= "(throw (RuntimeException. \"Failed to create the GLFW window\"))"
            (convert-statement "throw new RuntimeException(\"Failed to create the GLFW window\");"))))
 
+
+  (testing "Can convert a binary expression"
+    (is (= "(println \"Hello LWJGL\" (Version/getVersion) \"!\")"
+           (convert-statement "System.out.println(\"Hello LWJGL \" + Version.getVersion() + \"!\");"))))
+
   ;;(testing "Can convert an if statement"
   ;;  (is (= ""
   ;;         (convert-statement
