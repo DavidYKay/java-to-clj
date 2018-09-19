@@ -41,7 +41,8 @@
                      .getChildNodes
                      (map to-clj))))
 
-(defmethod to-clj BreakStmt [s] :BreakStmt)
+(defmethod to-clj BreakStmt [s]
+  "")
 
 (defmethod to-clj ContinueStmt [s] :CoStmtnil)
 
@@ -81,9 +82,30 @@
       (to-clj (.get e))
       :EmptyReturn)))
 
-(defmethod to-clj SwitchEntryStmt [s] :SwitchEntryStmt)
+(defmethod to-clj SwitchEntryStmt [x]
+  (let [l (.getLabel x)
+        ss (->> (.getStatements x)
+                (remove #(instance? BreakStmt %)))
 
-(defmethod to-clj SwitchStmt [s] :SwitchStmt)
+        components [(cond (.isPresent l) (.get l)
+                          (empty? ss) nil
+                          :default ":default")
+
+                    (if (empty? ss)
+                      nil
+                      (->> ss
+                           (map to-clj)
+                           (str/join " ")))]]
+        (str/join " " components)))
+
+
+(defmethod to-clj SwitchStmt [s]
+  (format "(condp = %s\n  %s)"
+          (to-clj (.getSelector s))
+          (->> (.getEntries s)
+               (map to-clj)
+               (remove str/blank?)
+               (str/join "\n  "))))
 
 (defmethod to-clj SynchronizedStmt [s] :SynhcronizedStmt)
 

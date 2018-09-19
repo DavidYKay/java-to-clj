@@ -5,12 +5,14 @@
             [clojure.test :as t :refer :all]
             [clojure.string :as str]))
 
-(def block-str (slurp (io/resource "code/Block.java")))
-(def android-prefs (slurp (io/resource "code/AndroidPrefs.java")))
-(def block-no-braces (slurp (io/resource "code/BlockNoBraces.java")))
-(def block-output (str/trim (slurp (io/resource "code/block.clj"))))
-(def if-statement (str/trim (slurp (io/resource "code/If.java"))))
-(def if-else-statement (str/trim (slurp (io/resource "code/IfElse.java"))))
+(defonce block-str (slurp (io/resource "code/Block.java")))
+(defonce android-prefs (slurp (io/resource "code/AndroidPrefs.java")))
+(defonce block-no-braces (slurp (io/resource "code/BlockNoBraces.java")))
+(defonce block-output (str/trim (slurp (io/resource "code/block.clj"))))
+(defonce if-statement (str/trim (slurp (io/resource "code/If.java"))))
+(defonce if-else-statement (str/trim (slurp (io/resource "code/IfElse.java"))))
+(defonce switch-statement (str/trim (slurp (io/resource "code/Switch.java"))))
+(defonce switch-output (str/trim (slurp (io/resource "code/switch.clj"))))
 
 (deftest ^:test-refresh/focus convert
 
@@ -90,7 +92,6 @@
     (is (= "(fn [a b] (+ a b))"
            (convert-expression "(a, b) -> a + b"))))
 
-
   (testing "Can convert an equality test"
     (is (= "(= window nil)"
            (convert-expression "(window == null)"))))
@@ -102,6 +103,10 @@
   (testing "Can correctly convert a this expression"
     (is (= "(.fireTheMissiles this)"
            (convert-expression "this.fireTheMissiles()"))))
+
+  (testing "Can correctly convert a switch statement"
+    (is (= switch-output
+           (convert-statement switch-statement))))
 
   )
 
