@@ -34,9 +34,6 @@
     (is (= "(def ^int[] indexes (into-array [2 0 1 1 3 2]))"
            (convert-statement "int [] indexes = { 2,0,1, 1,3,2 };"))))
 
-  (testing "Can convert an assignment expression"
-    (is (= "(def ^int x 5)"
-           (convert-statement "int x = 5;"))))
 
   (testing "Can convert a setBuffer call"
     (is (= "(.setBuffer mesh Type/Position 3 (BufferUtils/createFloatBuffer vertices))"
@@ -50,6 +47,15 @@
     (is (= "(println \"Hello LWJGL\" (Version/getVersion) \"!\")"
            (convert-statement "System.out.println(\"Hello LWJGL \" + Version.getVersion() + \"!\");"))))
 
+  (testing "Can correctly set an int value"
+    (is (= "(def x 5)"
+           (convert-statement "x = 5;"))))
+
+  (testing "Can convert an assignment expression"
+    (is (= "(def ^int x 5)"
+           (convert-statement "int x = 5;"))))
+
+
   ;;(testing "Can convert an if statement"
   ;;  (is (= ""
   ;;         (convert-statement
@@ -62,11 +68,8 @@
   )
 
 #_(deftest ^:test-refresh/focus focused
-
-    ;;(testing "Can correctly set an int value" (is (= "(def x 5)" (convert-statement "x = 5;"))))
-
+  ;;(testing "Can correctly set an array value"
+  ;;  (is (= "(aset vertices 0 (Vector3f. 0 0 0))"
+  ;;         (convert-statement "vertices[0] = new Vector3f(0,0,0);"))))
   )
 
-;;(testing "Can correctly set an array value"
-;;  (is (= "(aset vertices 0 (Vector3f. 0 0 0))"
-;;         (convert-statement "vertices[0] = new Vector3f(0,0,0);"))))

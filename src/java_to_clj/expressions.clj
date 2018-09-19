@@ -63,7 +63,10 @@
           (str/join " " (->> (.getValues e)
                              (map to-clj)))))
 
-(defmethod to-clj AssignExpr [e] :AssignExpr)
+(defmethod to-clj AssignExpr [e]
+  (format "(def %s %s)"
+          (to-clj (.getTarget e))
+          (to-clj (.getValue e))))
 
 (defmethod to-clj BinaryExpr [e] :BinaryExpr)
 
