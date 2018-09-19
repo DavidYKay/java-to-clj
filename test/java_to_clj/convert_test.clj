@@ -72,13 +72,15 @@
     (is (= "(inc x)"
            (convert-expression "x++")))
     (is (= "(inc x)"
-           (convert-expression "++x")))
-    )
+           (convert-expression "++x"))))
+
+  (testing "Can convert a ternary if"
+    (is (= "(if (= b 0) x y)"
+           (convert-expression "b == 0 ? x : y"))))
 
   (testing "Can convert an equality test"
     (is (= "(= window nil)"
-           (convert-expression "(window == null)")))
-    )
+           (convert-expression "(window == null)"))))
 
   (testing "Can convert an if statement"
     (is (= "(if (= window nil) (throw (RuntimeException. \"Failure!\")) 1)"

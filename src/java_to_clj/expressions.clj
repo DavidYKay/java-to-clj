@@ -122,7 +122,11 @@
 
 (defmethod to-clj ClassExpr [e] :ClassExpr)
 
-(defmethod to-clj ConditionalExpr [e] :ConditionalExpr)
+(defmethod to-clj ConditionalExpr [e]
+  (format "(if %s %s %s)"
+          (to-clj (.getCondition e))
+          (to-clj (.getThenExpr e))
+          (to-clj (.getElseExpr e))))
 
 (defmethod to-clj EnclosedExpr [e]
   (to-clj (.getInner e)))
