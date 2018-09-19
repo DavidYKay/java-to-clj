@@ -3,6 +3,7 @@
   [java-to-clj.protocols :refer [to-clj]])
   (:import
    [com.github.javaparser.ast
+    ArrayCreationLevel
     body.VariableDeclarator
     expr.SimpleName
     comments.Comment
@@ -11,13 +12,17 @@
    ))
 (defmethod to-clj String [s] s)
 
-(defmethod to-clj ClassOrInterfaceType [x] :ClassOrInterfaceType)
+(defmethod to-clj ClassOrInterfaceType [t]
+  (to-clj (.getName t)))
 
 (defmethod to-clj SimpleName [x]
   (.asString x))
 
 (defmethod to-clj Comment [c]
   (format ";; %s" (.getContent c)))
+
+(defmethod to-clj ArrayCreationLevel [a]
+  (.get (.getDimension a)))
 
 (defmethod to-clj VariableDeclarator [vd]
   (let [n (.getName vd)

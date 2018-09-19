@@ -61,7 +61,13 @@
             (.getIndex e))
     :non-array-access-expression))
 
-(defmethod to-clj ArrayCreationExpr [e] :ArrayCreationExpr)
+(defmethod to-clj ArrayCreationExpr [e]
+  ;;(.getInitializer e)
+  (format "(make-array %s %s)"
+          (to-clj (.getElementType e))
+          (->> (.getLevels e)
+               (map to-clj)
+               (str/join " "))))
 
 (defmethod to-clj ArrayInitializerExpr [e]
   (format "(into-array [%s])"
