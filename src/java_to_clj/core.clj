@@ -20,50 +20,56 @@
 (def block (parse-block block-str))
 (defonce string-concat-statement (str/trim (slurp (io/resource "code/StringConcat.java"))))
 
-(def s (parse-statement string-concat-statement))
 
-(def b (->> s
-            .getExpression
+(def lines ["float[] normals = new float[12];"
+            "int [] indexes = { 2,0,1, 1,3,2 };"
+            "normals = new float[]{0,0,1, 0,0,1, 0,0,1, 0,0,1};"
+            "mesh.setBuffer(Type.Normal, 3, BufferUtils.createFloatBuffer(normals));"])
 
-            .getVariables
-            first
-            .getInitializer
-            .get)
-  )
+;;(def s (parse-statement string-concat-statement))
+
+(def a (->
+        (nth lines 0)
+        parse-statement
+        .getExpression
+        .getVariables
+        first
+        .getInitializer
+        .get
+        ))
+
+(def b (->
+        (nth lines 1)
+        parse-statement
+        .getExpression
+        .getVariables
+        first
+        .getInitializer
+        .get
+        ;;.getType
+        ;;to-clj
+        ;;.getValue
+        ))
 
 (-> b
-    .getLeft
-    .getLeft
-    .getLeft
-    .getLeft
-    ;.getLeft
- )
+    ;;.getInitializer
+    ;;.get
+    ;;to-clj
+    )
 
+;;(-> s .getExpression .getVariables first .getType)
 
-;;(def statement (parse-statement "Geometry coloredMesh = new Geometry (\"ColoredMesh\", cMesh);"))
-;;(def statement (parse-statement hello-statement))
+;;(def b (->> s
+;;            .getExpression
 ;;
-;;(def statements (->> block
-;;                     .getChildNodes))
+;;            .getVariables
+;;            first
+;;            .getInitializer
+;;            .get)
+;;  )
 ;;
-;;statements
-;;
-;;(def variable-declarator
-;;  (->> statement
-;;       .getChildNodes
-;;       first
-;;       .getVariables
-;;       first))
-;;
-;;variable-declarator
-;;
-;;(def initializer (-> (.getInitializer variable-declarator)
-;;                     .get))
-;;initializer
-
-
-
-;;(to-clj variable-declarator)
-;;(convert-block block)
-;;(->> (.getStatements block) first)
-;;(to-clj initializer)
+;;(-> b
+;;    .getLeft
+;;    .getLeft
+;;    .getLeft
+;;    .getLeft)

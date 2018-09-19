@@ -37,7 +37,7 @@
 
   (testing
       "Can initialize a Java array"
-    (is (= "(def ^int[] indexes (into-array [2 0 1 1 3 2]))"
+    (is (= "(def ^int[] indexes (int-array [2 0 1 1 3 2]))"
            (convert-statement "int [] indexes = { 2,0,1, 1,3,2 };"))))
 
   (testing "Can convert a throw statement"
@@ -110,6 +110,16 @@
   (testing "Can correctly convert a switch statement"
     (is (= switch-output
            (convert-statement switch-statement))))
+
+  (testing "Can correctly convert a primitive"
+     (is (= "(def ^float[] normals (make-array float 12))"
+            (convert-statement "float[] normals = new float[12];"))))
+
+  (testing "Can correctly convert a primitive array type"
+    (is (= "(def normals (float-array [0 0 1 0 0 1 0 0 1 0 0 1]))"
+           (convert-statement "normals = new float[]{0,0,1, 0,0,1, 0,0,1, 0,0,1};"))))
+
+  ;;"mesh.setBuffer(Type.Normal, 3, BufferUtils.createFloatBuffer(normals));"])
 
   ;;(testing "Can correctly convert an assertion"
   ;;  (is (= "(assert nullsRemoved)"

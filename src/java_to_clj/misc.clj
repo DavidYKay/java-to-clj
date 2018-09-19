@@ -8,11 +8,16 @@
     body.Parameter
     expr.SimpleName
     comments.Comment
-    type.ClassOrInterfaceType
-    type.PrimitiveType
-    type.PrimitiveType$Primitive
-    type.WildcardType
     ]
+   [com.github.javaparser.ast.expr
+    ArrayCreationExpr
+    ArrayInitializerExpr]
+   [com.github.javaparser.ast.type
+    ArrayType
+    ClassOrInterfaceType
+    PrimitiveType
+    PrimitiveType$Primitive
+    WildcardType]
    ))
 
 (defmethod to-clj String [s] s)
@@ -39,7 +44,10 @@
   (format ";; %s" (.getContent c)))
 
 (defmethod to-clj ArrayCreationLevel [a]
-  (.get (.getDimension a)))
+  (let [d (.getDimension a)]
+    (if (.isPresent d)
+      (.get d)
+      nil)))
 
 (defmethod to-clj PrimitiveType [t]
   (condp = (.getType t)
@@ -55,8 +63,45 @@
 (defmethod to-clj VariableDeclarator [vd]
   (let [n (.getName vd)
         t (.getType vd)
-        i (.getInitializer vd)
-        i (if (.isPresent i)
-            (to-clj (.get i))
-            nil)]
-    (format "(def ^%s %s %s)" t n i)))
+        i (.getInitializer vd)]
+    (if (.isPresent i)
+      (let [i (.get i)
+            conventional-init (format "(def ^%s %s %s)"
+                                      (to-clj t)
+                                      (to-clj n)
+                                      (to-clj i))]
+        ;; TODO: this code is currently redundant with the implementation in expressions.clj
+        (cond
+          ;; new float[12]
+          (instance? ArrayCreationExpr i) conventional-init
+          ;; { 1,2,3,4 }
+          (and (instance? ArrayInitializerExpr i)
+               (instance? PrimitiveType (.getComponentType t)))
+          (format "(def ^%s %s (%s [%s]))"
+                  (to-clj t)
+                  (to-clj n)
+                  (condp = (.getType (.getComponentType t))
+                    PrimitiveType$Primitive/BOOLEAN 'boolean-array
+                    PrimitiveType$Primitive/BYTE    'byte-array
+                    PrimitiveType$Primitive/CHAR    'char-array
+                    PrimitiveType$Primitive/DOUBLE  'double-array
+                    PrimitiveType$Primitive/FLOAT   'float-array
+                    PrimitiveType$Primitive/INT     'int-array
+                    PrimitiveType$Primitive/LONG    'long-array
+                    PrimitiveType$Primitive/SHORT   'short-array
+                    (do
+                      (println "type was: " t)
+                      (println "component type: " (.getComponentType t))
+                      :unknown-primitive))
+                  (to-clj i))
+
+          ;; Conventional init
+          :default conventional-init
+          ))
+
+      ;;:valueless-init
+      ;; Valueless init
+      (format "(def ^%s %s)"
+              (to-clj t)
+              (to-clj n)))))
+

@@ -2,43 +2,47 @@
   (:require [clojure.string :as str]
             [java-to-clj.protocols :refer [to-clj]])
   (:import
-   [com.github.javaparser JavaParser]
-   [com.github.javaparser.ast.expr
-    Expression
-    AnnotationExpr
-    ArrayAccessExpr
-    ArrayCreationExpr
-    ArrayInitializerExpr
-    AssignExpr
-    BinaryExpr
-    BinaryExpr$Operator
-    CastExpr
-    ClassExpr
-    ConditionalExpr
-    EnclosedExpr
-    FieldAccessExpr
-    InstanceOfExpr
-    LambdaExpr
-    LiteralExpr
-    MethodCallExpr
-    MethodReferenceExpr
-    NameExpr
-    ObjectCreationExpr
-    SuperExpr
-    StringLiteralExpr
-    ThisExpr
-    TypeExpr
-    UnaryExpr
-    UnaryExpr$Operator
-    VariableDeclarationExpr
-    BooleanLiteralExpr
-    LiteralStringValueExpr
-    CharLiteralExpr
-    DoubleLiteralExpr
-    IntegerLiteralExpr
-    LongLiteralExpr
-    NullLiteralExpr
-    ]))
+    [com.github.javaparser JavaParser]
+    [com.github.javaparser.ast.expr
+     Expression
+     AnnotationExpr
+     ArrayAccessExpr
+     ArrayCreationExpr
+     ArrayInitializerExpr
+     AssignExpr
+     BinaryExpr
+     BinaryExpr$Operator
+     CastExpr
+     ClassExpr
+     ConditionalExpr
+     EnclosedExpr
+     FieldAccessExpr
+     InstanceOfExpr
+     LambdaExpr
+     LiteralExpr
+     MethodCallExpr
+     MethodReferenceExpr
+     NameExpr
+     ObjectCreationExpr
+     SuperExpr
+     StringLiteralExpr
+     ThisExpr
+     TypeExpr
+     UnaryExpr
+     UnaryExpr$Operator
+     VariableDeclarationExpr
+     BooleanLiteralExpr
+     LiteralStringValueExpr
+     CharLiteralExpr
+     DoubleLiteralExpr
+     IntegerLiteralExpr
+     LongLiteralExpr
+     NullLiteralExpr
+     ]
+    [com.github.javaparser.ast.type
+     PrimitiveType
+    PrimitiveType$Primitive]
+    (com.github.javaparser.ast.visitor VoidVisitorAdapter)))
 
 (defn- escape-str [s]
   (str \" s \"))
@@ -58,25 +62,41 @@
 
 (defmethod to-clj AnnotationExpr [e] :AnnotationExpr)
 
+(defmethod to-clj ArrayCreationExpr [e]
+  (let [i (.getInitializer e)
+        t (.getElementType e)]
+    (if (and (.isPresent i)
+             (instance? PrimitiveType t))
+      (let [t (.getElementType e)
+            array-fn (condp = (.getType t)
+                       PrimitiveType$Primitive/BOOLEAN 'boolean-array
+                       PrimitiveType$Primitive/BYTE    'byte-array
+                       PrimitiveType$Primitive/CHAR    'char-array
+                       PrimitiveType$Primitive/DOUBLE  'double-array
+                       PrimitiveType$Primitive/FLOAT   'float-array
+                       PrimitiveType$Primitive/INT     'int-array
+                       PrimitiveType$Primitive/LONG    'long-array
+                       PrimitiveType$Primitive/SHORT   'short-array
+                       :unknown-primitive)]
+        (format "(%s [%s])" array-fn
+                (to-clj (.get i))))
+      (format "(make-array %s %s)"
+              (to-clj t)
+              (->> (.getLevels e)
+                   (map to-clj)
+                   (str/join " "))))))
+
+(defmethod to-clj ArrayInitializerExpr [e]
+  (format "%s"
+          (str/join " " (->> (.getValues e)
+                             (map to-clj)))))
+
 (defmethod to-clj ArrayAccessExpr [e]
   (if (.isArrayAccessExpr e)
     (format "(aget %s %s)"
             (.getName e)
             (.getIndex e))
     :non-array-access-expression))
-
-(defmethod to-clj ArrayCreationExpr [e]
-  ;;(.getInitializer e)
-  (format "(make-array %s %s)"
-          (to-clj (.getElementType e))
-          (->> (.getLevels e)
-               (map to-clj)
-               (str/join " "))))
-
-(defmethod to-clj ArrayInitializerExpr [e]
-  (format "(into-array [%s])"
-          (str/join " " (->> (.getValues e)
-                             (map to-clj)))))
 
 (defmethod to-clj AssignExpr [e]
   (let [t (.getTarget e)
@@ -90,8 +110,17 @@
               (to-clj t)
               (to-clj v)))))
 
+
+;;(defn is-str-join? [e]
+;;  (let [v (proxy VoidVisitorAdapter []
+;;                 (visit [^MethodCallExpr n ^Object arg]
+;;                        (proxy-super visit n arg)
+;;                        (println " [L " (.getBeginLine n) + "] " + n)))]
+;;    (.visit v e)))
+
 (defmethod to-clj BinaryExpr [e]
-  (let [l (.getLeft e)
+  (let [
+        l (.getLeft e)
         r (.getRight e)
         o (.getOperator e)
         o (if (and (= BinaryExpr$Operator/PLUS o)

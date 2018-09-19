@@ -3,6 +3,7 @@
    [clojure.string :as str]
    [java-to-clj.protocols :refer [to-clj]]
    [java-to-clj.parse :refer [parse-block parse-expression parse-statement]]
+   [java-to-clj.arrays]
    [java-to-clj.expressions]
    [java-to-clj.statements]
    [java-to-clj.misc]
