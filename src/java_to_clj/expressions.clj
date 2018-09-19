@@ -134,7 +134,10 @@
 (defmethod to-clj EnclosedExpr [e]
   (to-clj (.getInner e)))
 
-(defmethod to-clj InstanceOfExpr [e] :InstanceOfExpr)
+(defmethod to-clj InstanceOfExpr [e]
+  (format "(instance? %s %s)"
+          (to-clj (.getType e))
+          (to-clj (.getExpression e))))
 
 (defmethod to-clj LambdaExpr [e] :LambdaExpr)
 

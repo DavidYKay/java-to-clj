@@ -82,6 +82,10 @@
     (is (= "(cast String o)"
            (convert-expression "(String) o"))))
 
+  (testing "Can perform an instanceof"
+    (is (= "(instance? Car c)"
+           (convert-expression "c instanceof Car"))))
+
   (testing "Can convert an equality test"
     (is (= "(= window nil)"
            (convert-expression "(window == null)"))))
