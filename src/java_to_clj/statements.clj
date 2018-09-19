@@ -79,8 +79,7 @@
   (let [e (.getExpression s)]
     (if (.isPresent e)
       (to-clj (.get e))
-      :EmptyReturn
-      )))
+      :EmptyReturn)))
 
 (defmethod to-clj SwitchEntryStmt [s] :SwitchEntryStmt)
 
@@ -95,9 +94,9 @@
             (to-clj e))))
 
 (defmethod to-clj TryStmt [s]
-  ;; NodeList<CatchClause> 	getCatchClauses() 
-  ;; Optional<BlockStmt> 	getFinallyBlock() 
-  ;; TryStmtMetaModel 	getMetaModel() 
+  ;; NodeList<CatchClause> 	getCatchClauses()
+  ;; Optional<BlockStmt> 	getFinallyBlock()
+  ;; TryStmtMetaModel 	getMetaModel()
   ;; NodeList<Expression> 	getResources()
 
   :TryStmt

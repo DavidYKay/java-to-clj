@@ -75,6 +75,11 @@
            (convert-expression "++x")))
     )
 
+  (testing "Can convert an equality test"
+    (is (= "(= window nil)"
+           (convert-expression "(window == null)")))
+    )
+
   (testing "Can convert an if statement"
     (is (= "(if (= window nil) (throw (RuntimeException. \"Failure!\")) 1)"
            (convert-statement if-else-statement))))

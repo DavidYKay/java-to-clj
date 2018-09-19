@@ -97,7 +97,26 @@
           (to-clj (.getRight e))))
 
 (defmethod to-clj BinaryExpr$Operator [e]
-  (.asString e))
+  (condp = e
+    BinaryExpr$Operator/UNSIGNED_RIGHT_SHIFT "bit-shift-right"
+    BinaryExpr$Operator/AND                  "and"
+    BinaryExpr$Operator/BINARY_AND           "bit-and"
+    BinaryExpr$Operator/BINARY_OR            "bit-or"
+    BinaryExpr$Operator/DIVIDE               "/"
+    BinaryExpr$Operator/EQUALS               "="
+    BinaryExpr$Operator/GREATER              ">"
+    BinaryExpr$Operator/GREATER_EQUALS       ">="
+    BinaryExpr$Operator/LEFT_SHIFT           "bit-shift-left"
+    BinaryExpr$Operator/LESS                 "<"
+    BinaryExpr$Operator/LESS_EQUALS          "<="
+    BinaryExpr$Operator/MINUS                "-"
+    BinaryExpr$Operator/MULTIPLY             "*"
+    BinaryExpr$Operator/NOT_EQUALS           "not="
+    BinaryExpr$Operator/OR                   "or"
+    BinaryExpr$Operator/PLUS                 "+"
+    BinaryExpr$Operator/REMAINDER            "mod"
+    BinaryExpr$Operator/SIGNED_RIGHT_SHIFT   "unsigned-bit-shift-right"
+    BinaryExpr$Operator/XOR                  "bit-xor"))
 
 (defmethod to-clj CastExpr [e] :CastExpr)
 
@@ -105,7 +124,8 @@
 
 (defmethod to-clj ConditionalExpr [e] :ConditionalExpr)
 
-(defmethod to-clj EnclosedExpr [e] :EnclosedExpr)
+(defmethod to-clj EnclosedExpr [e]
+  (to-clj (.getInner e)))
 
 (defmethod to-clj InstanceOfExpr [e] :InstanceOfExpr)
 
