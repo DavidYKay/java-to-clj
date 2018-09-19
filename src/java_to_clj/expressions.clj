@@ -54,7 +54,12 @@
 
 (defmethod to-clj AnnotationExpr [e] :AnnotationExpr)
 
-(defmethod to-clj ArrayAccessExpr [e] :ArrayAccessExpr)
+(defmethod to-clj ArrayAccessExpr [e]
+  (if (.isArrayAccessExpr e)
+    (format "(aget %s %s)"
+            (.getName e)
+            (.getIndex e))
+    :non-array-access-expression))
 
 (defmethod to-clj ArrayCreationExpr [e] :ArrayCreationExpr)
 

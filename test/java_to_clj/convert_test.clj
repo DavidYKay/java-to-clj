@@ -10,7 +10,7 @@
 (def block-no-braces (slurp (io/resource "code/BlockNoBraces.java")))
 (def block-output (str/trim (slurp (io/resource "code/block.clj"))))
 
-(deftest convert
+(deftest ^:test-refresh/focus convert
 
   (testing "Can convert the first line of the block"
     (is (= "(def ^Geometry coloredMesh (Geometry. \"ColoredMesh\" cMesh))"
@@ -35,19 +35,12 @@
            (convert-statement "int [] indexes = { 2,0,1, 1,3,2 };"))))
 
 
-  (testing "Can convert a setBuffer call"
-    (is (= "(.setBuffer mesh Type/Position 3 (BufferUtils/createFloatBuffer vertices))"
-           (convert-statement "mesh.setBuffer(Type.Position, 3, BufferUtils.createFloatBuffer(vertices));"))))
-
   (testing "Can convert a throw statement"
     (is (= "(throw (RuntimeException. \"Failed to create the GLFW window\"))"
            (convert-statement "throw new RuntimeException(\"Failed to create the GLFW window\");"))))
 
-  (testing "Can convert a binary expression"
-    (is (= "(println \"Hello LWJGL\" (Version/getVersion) \"!\")"
-           (convert-statement "System.out.println(\"Hello LWJGL \" + Version.getVersion() + \"!\");"))))
-
   (testing "Can correctly set an int value"
+    ;; Should this be alter-var-root?
     (is (= "(def x 5)"
            (convert-statement "x = 5;"))))
 
@@ -55,6 +48,18 @@
     (is (= "(def ^int x 5)"
            (convert-statement "int x = 5;"))))
 
+  (testing "Can correctly get an array value"
+    (is (= "(aget vertices 0)"
+           (convert-statement "vertices[0];"))))
+
+  )
+
+#_(deftest ^:test-refresh/focus focused)
+
+(deftest next
+  (testing "Can correctly set an array value"
+    (is (= "(aset vertices 0 (Vector3f. 0 0 0))"
+           (convert-statement "vertices[0] = new Vector3f(0,0,0);"))))
 
   ;;(testing "Can convert an if statement"
   ;;  (is (= ""
@@ -63,13 +68,13 @@
 
   ;;                    }
   ;;          ));"))))
+  (testing "Can convert a binary expression"
+    (is (= "(println \"Hello LWJGL\" (Version/getVersion) \"!\")"
+           (convert-statement "System.out.println(\"Hello LWJGL \" + Version.getVersion() + \"!\");"))))
 
-  ;; (testing "Can convert an android example" (is (= "(.setBuffer mesh Type/Position 3 (BufferUtils/createFloatBuffer vertices))" (convert-main android-prefs))))
+  (testing "Can convert a setBuffer call"
+    (is (= "(.setBuffer mesh Type/Position 3 (BufferUtils/createFloatBuffer vertices))"
+           (convert-statement "mesh.setBuffer(Type.Position, 3, BufferUtils.createFloatBuffer(vertices));"))))
+
+   (testing "Can convert an android example" (is (= "(.setBuffer mesh Type/Position 3 (BufferUtils/createFloatBuffer vertices))" (convert-main android-prefs))))
   )
-
-#_(deftest ^:test-refresh/focus focused
-  ;;(testing "Can correctly set an array value"
-  ;;  (is (= "(aset vertices 0 (Vector3f. 0 0 0))"
-  ;;         (convert-statement "vertices[0] = new Vector3f(0,0,0);"))))
-  )
-
