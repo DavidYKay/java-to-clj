@@ -118,7 +118,10 @@
     BinaryExpr$Operator/SIGNED_RIGHT_SHIFT   "unsigned-bit-shift-right"
     BinaryExpr$Operator/XOR                  "bit-xor"))
 
-(defmethod to-clj CastExpr [e] :CastExpr)
+(defmethod to-clj CastExpr [e]
+  (format "(cast %s %s)"
+           (to-clj (.getType e))
+           (to-clj (.getExpression e))))
 
 (defmethod to-clj ClassExpr [e] :ClassExpr)
 

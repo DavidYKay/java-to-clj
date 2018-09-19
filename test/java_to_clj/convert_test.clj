@@ -78,6 +78,10 @@
     (is (= "(if (= b 0) x y)"
            (convert-expression "b == 0 ? x : y"))))
 
+  (testing "Can perform a casting operation"
+    (is (= "(cast String o)"
+           (convert-expression "(String) o"))))
+
   (testing "Can convert an equality test"
     (is (= "(= window nil)"
            (convert-expression "(window == null)"))))
