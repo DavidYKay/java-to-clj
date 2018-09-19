@@ -34,7 +34,9 @@
     UnparsableStmt
     WhileStmt]))
 
-(defmethod to-clj AssertStmt [s] :AssertStmt)
+(defmethod to-clj AssertStmt [s]
+  (format "(assert %s)"
+          (to-clj (.getCheck s))))
 
 (defmethod to-clj BlockStmt [s]
   (str/join "\n" (->> s

@@ -13,6 +13,7 @@
 (defonce if-else-statement (str/trim (slurp (io/resource "code/IfElse.java"))))
 (defonce switch-statement (str/trim (slurp (io/resource "code/Switch.java"))))
 (defonce switch-output (str/trim (slurp (io/resource "code/switch.clj"))))
+(defonce assert-statement (str/trim (slurp (io/resource "code/Assert.java"))))
 
 (deftest ^:test-refresh/focus convert
 
@@ -107,6 +108,13 @@
   (testing "Can correctly convert a switch statement"
     (is (= switch-output
            (convert-statement switch-statement))))
+
+  (testing "Can correctly convert an assertion"
+    (is (= "(assert nullsRemoved)"
+           (convert-statement "assert nullsRemoved;")))
+
+    ;;(is (= "" (convert-statement assert-statement)))
+    )
 
   )
 
