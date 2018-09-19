@@ -1,2 +1,2 @@
-if ( window == NULL )
-  throw new RuntimeException("Failed to create the GLFW window");
+if ( window == null )
+  throw new RuntimeException("Failure!");

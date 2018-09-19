@@ -37,6 +37,7 @@
     DoubleLiteralExpr
     IntegerLiteralExpr
     LongLiteralExpr
+    NullLiteralExpr
     ]))
 
 (defn- escape-str [s]
@@ -49,6 +50,7 @@
 (defmethod to-clj IntegerLiteralExpr [e] (.asInt e))
 (defmethod to-clj LongLiteralExpr [e] (.asLong e))
 (defmethod to-clj StringLiteralExpr [e] (escape-str (.asString e)))
+(defmethod to-clj NullLiteralExpr [e] "nil")
 
 (defmethod to-clj NameExpr [e] (-> e .getName to-clj))
 
@@ -109,7 +111,9 @@
 
 (defmethod to-clj LambdaExpr [e] :LambdaExpr)
 
-(defmethod to-clj LiteralExpr [e] :LiteralExpr)
+(defmethod to-clj LiteralExpr [e]
+  :LiteralExpr
+  )
 
 (defmethod to-clj MethodCallExpr [e]
   (let [s (-> e .getScope)

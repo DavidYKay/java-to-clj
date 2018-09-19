@@ -9,6 +9,8 @@
 (def android-prefs (slurp (io/resource "code/AndroidPrefs.java")))
 (def block-no-braces (slurp (io/resource "code/BlockNoBraces.java")))
 (def block-output (str/trim (slurp (io/resource "code/block.clj"))))
+(def if-statement (str/trim (slurp (io/resource "code/If.java"))))
+(def if-else-statement (str/trim (slurp (io/resource "code/IfElse.java"))))
 
 (deftest ^:test-refresh/focus convert
 
@@ -28,12 +30,10 @@
     (is (= block-output
            (convert-main block-no-braces))))
 
-
   (testing
       "Can initialize a Java array"
     (is (= "(def ^int[] indexes (into-array [2 0 1 1 3 2]))"
            (convert-statement "int [] indexes = { 2,0,1, 1,3,2 };"))))
-
 
   (testing "Can convert a throw statement"
     (is (= "(throw (RuntimeException. \"Failed to create the GLFW window\"))"
@@ -75,6 +75,10 @@
            (convert-expression "++x")))
     )
 
+  (testing "Can convert an if statement"
+    (is (= "(if (= window nil) (throw (RuntimeException. \"Failure!\")) 1)"
+           (convert-statement if-else-statement))))
+
   (testing "Can correctly convert a this expression"
     (is (= "(.fireTheMissiles this)"
            (convert-expression "this.fireTheMissiles()"))))
@@ -85,13 +89,6 @@
 
 (deftest next
 
-  ;;(testing "Can convert an if statement"
-  ;;  (is (= ""
-  ;;         (convert-statement
-  ;;          if (x == 5) {
-
-  ;;                    }
-  ;;          ));"))))
   (testing "Can convert a binary expression"
     (is (= "(println \"Hello LWJGL\" (Version/getVersion) \"!\")"
            (convert-statement "System.out.println(\"Hello LWJGL \" + Version.getVersion() + \"!\");"))))

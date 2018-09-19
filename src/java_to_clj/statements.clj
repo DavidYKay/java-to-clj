@@ -58,13 +58,29 @@
 
 (defmethod to-clj ForStmt [s] :ForStmt)
 
-(defmethod to-clj IfStmt [s] :IfStmt)
+(defmethod to-clj IfStmt [s]
+  (let [c (.getCondition s)
+        t (.getThenStmt s)
+        e (.getElseStmt s)]
+    (if (.isPresent e)
+      (format "(if %s %s %s)"
+              (to-clj c)
+              (to-clj t)
+              (to-clj (.get e)))
+      (format "(when %s %s)"
+              (to-clj c)
+              (to-clj t)))))
 
 (defmethod to-clj LabeledStmt [s] :LabeledStmt)
 
 (defmethod to-clj LocalClassDeclarationStmt [s] :LocalClassDeclaration)
 
-(defmethod to-clj ReturnStmt [s] :ReturnStmt)
+(defmethod to-clj ReturnStmt [s]
+  (let [e (.getExpression s)]
+    (if (.isPresent e)
+      (to-clj (.get e))
+      :EmptyReturn
+      )))
 
 (defmethod to-clj SwitchEntryStmt [s] :SwitchEntryStmt)
 
