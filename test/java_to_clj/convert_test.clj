@@ -52,14 +52,15 @@
     (is (= "(aget vertices 0)"
            (convert-statement "vertices[0];"))))
 
+  (testing "Can correctly set an array value"
+    (is (= "(aset vertices 0 (Vector3f. 0 0 0))"
+           (convert-statement "vertices[0] = new Vector3f(0,0,0);"))))
   )
 
 #_(deftest ^:test-refresh/focus focused)
 
 (deftest next
-  (testing "Can correctly set an array value"
-    (is (= "(aset vertices 0 (Vector3f. 0 0 0))"
-           (convert-statement "vertices[0] = new Vector3f(0,0,0);"))))
+  
 
   ;;(testing "Can convert an if statement"
   ;;  (is (= ""

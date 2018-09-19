@@ -69,9 +69,16 @@
                              (map to-clj)))))
 
 (defmethod to-clj AssignExpr [e]
-  (format "(def %s %s)"
-          (to-clj (.getTarget e))
-          (to-clj (.getValue e))))
+  (let [t (.getTarget e)
+        v (.getValue e)]
+    (if (isa? (class t) ArrayAccessExpr)
+      (format "(aset %s %s %s)"
+              (.getName t)
+              (.getIndex t)
+              (to-clj v))
+      (format "(def %s %s)"
+              (to-clj t)
+              (to-clj v)))))
 
 (defmethod to-clj BinaryExpr [e] :BinaryExpr)
 
