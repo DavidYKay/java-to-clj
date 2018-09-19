@@ -38,6 +38,10 @@
   (testing "Can convert a throw statement"
     (is (= "(throw (RuntimeException. \"Failed to create the GLFW window\"))"
            (convert-statement "throw new RuntimeException(\"Failed to create the GLFW window\");"))))
+  (testing "Can correctly add two numbers"
+    ;; Should this be alter-var-root?
+    (is (= "(def ^int x (+ 1 1))"
+           (convert-statement "int x = 1 + 1;"))))
 
   (testing "Can correctly set an int value"
     ;; Should this be alter-var-root?

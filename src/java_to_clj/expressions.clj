@@ -11,6 +11,7 @@
     ArrayInitializerExpr
     AssignExpr
     BinaryExpr
+    BinaryExpr$Operator
     CastExpr
     ClassExpr
     ConditionalExpr
@@ -86,7 +87,14 @@
               (to-clj t)
               (to-clj v)))))
 
-(defmethod to-clj BinaryExpr [e] :BinaryExpr)
+(defmethod to-clj BinaryExpr [e]
+  (format "(%s %s %s)"
+          (to-clj (.getOperator e))
+          (to-clj (.getLeft e))
+          (to-clj (.getRight e))))
+
+(defmethod to-clj BinaryExpr$Operator [e]
+  (.asString e))
 
 (defmethod to-clj CastExpr [e] :CastExpr)
 
