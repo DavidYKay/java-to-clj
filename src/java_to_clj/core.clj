@@ -18,6 +18,27 @@
 (def hello-statement "Geometry coloredMesh = new Geometry (\"ColoredMesh\", cMesh);")
 
 (def block (parse-block block-str))
+(defonce string-concat-statement (str/trim (slurp (io/resource "code/StringConcat.java"))))
+
+(def s (parse-statement string-concat-statement))
+
+(def b (->> s
+            .getExpression
+
+            .getVariables
+            first
+            .getInitializer
+            .get)
+  )
+
+(-> b
+    .getLeft
+    .getLeft
+    .getLeft
+    .getLeft
+    ;.getLeft
+ )
+
 
 ;;(def statement (parse-statement "Geometry coloredMesh = new Geometry (\"ColoredMesh\", cMesh);"))
 ;;(def statement (parse-statement hello-statement))

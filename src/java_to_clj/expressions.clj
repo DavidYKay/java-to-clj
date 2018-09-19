@@ -91,10 +91,19 @@
               (to-clj v)))))
 
 (defmethod to-clj BinaryExpr [e]
-  (format "(%s %s %s)"
-          (to-clj (.getOperator e))
-          (to-clj (.getLeft e))
-          (to-clj (.getRight e))))
+  (let [l (.getLeft e)
+        r (.getRight e)
+        o (.getOperator e)
+        o (if (and (= BinaryExpr$Operator/PLUS o)
+                   (or (instance? StringLiteralExpr l)
+                       (instance? StringLiteralExpr r)))
+            "str"
+            (to-clj o))]
+        (format "(%s %s %s)"
+                o
+                (to-clj l)
+                (to-clj r))
+    ))
 
 (defmethod to-clj BinaryExpr$Operator [e]
   (condp = e
