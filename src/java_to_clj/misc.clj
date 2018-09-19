@@ -5,9 +5,11 @@
    [com.github.javaparser.ast
     ArrayCreationLevel
     body.VariableDeclarator
+    body.Parameter
     expr.SimpleName
     comments.Comment
     type.ClassOrInterfaceType
+    type.WildcardType
     ]
    ))
 (defmethod to-clj String [s] s)
@@ -17,6 +19,18 @@
 
 (defmethod to-clj SimpleName [x]
   (.asString x))
+
+(defmethod to-clj Parameter [x]
+  (str (if (.isVarArgs x)
+         "& "
+         "")
+       (let [n (.getName x)
+             t (.getType x)]
+         (if (= WildcardType t)
+           (format "^%s %s"
+                   (to-clj t)
+                   (to-clj n))
+           (to-clj n)))))
 
 (defmethod to-clj Comment [c]
   (format ";; %s" (.getContent c)))

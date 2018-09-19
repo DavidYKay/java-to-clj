@@ -86,6 +86,11 @@
     (is (= "(instance? Car c)"
            (convert-expression "c instanceof Car"))))
 
+  (testing "Can convert a lambda"
+    (is (= "(fn [a b] (+ a b))"
+           (convert-expression "(a, b) -> a + b"))))
+
+
   (testing "Can convert an equality test"
     (is (= "(= window nil)"
            (convert-expression "(window == null)"))))

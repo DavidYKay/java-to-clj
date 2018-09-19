@@ -139,11 +139,16 @@
           (to-clj (.getType e))
           (to-clj (.getExpression e))))
 
-(defmethod to-clj LambdaExpr [e] :LambdaExpr)
+(defmethod to-clj LambdaExpr [e]
+  (let [b (.getExpressionBody e)]
+    (format "(fn [%s] %s)"
+            (->> (.getParameters e)
+                 (map to-clj)
+                 (str/join " "))
+            (to-clj (.getBody e)))))
 
 (defmethod to-clj LiteralExpr [e]
-  :LiteralExpr
-  )
+  :LiteralExpr)
 
 (defmethod to-clj MethodCallExpr [e]
   (let [s (-> e .getScope)
