@@ -75,6 +75,10 @@
            (convert-expression "++x")))
     )
 
+  (testing "Can correctly convert a this expression"
+    (is (= "(.fireTheMissiles this)"
+           (convert-expression "this.fireTheMissiles()"))))
+
   )
 
 #_(deftest ^:test-refresh/focus focused)

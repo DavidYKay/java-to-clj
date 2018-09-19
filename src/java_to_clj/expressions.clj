@@ -133,7 +133,8 @@
 
 (defmethod to-clj SuperExpr [e] :SuperExpr)
 
-(defmethod to-clj ThisExpr [e] :ThisExpr)
+(defmethod to-clj ThisExpr [e]
+  "this")
 
 (defmethod to-clj TypeExpr [e] :TypeExpr)
 
