@@ -9,6 +9,8 @@
     expr.SimpleName
     comments.Comment
     type.ClassOrInterfaceType
+    type.PrimitiveType
+    type.PrimitiveType$Primitive
     type.WildcardType
     ]
    ))
@@ -38,6 +40,17 @@
 
 (defmethod to-clj ArrayCreationLevel [a]
   (.get (.getDimension a)))
+
+(defmethod to-clj PrimitiveType [t]
+  (condp = (.getType t)
+    PrimitiveType$Primitive/BOOLEAN "boolean"
+    PrimitiveType$Primitive/BYTE  "byte"
+    PrimitiveType$Primitive/CHAR  "char"
+    PrimitiveType$Primitive/DOUBLE "double"
+    PrimitiveType$Primitive/FLOAT "float"
+    PrimitiveType$Primitive/INT   "int"
+    PrimitiveType$Primitive/LONG  "long"
+    PrimitiveType$Primitive/SHORT "short" ))
 
 (defmethod to-clj VariableDeclarator [vd]
   (let [n (.getName vd)

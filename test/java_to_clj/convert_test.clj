@@ -15,6 +15,7 @@
 (defonce switch-output (str/trim (slurp (io/resource "code/switch.clj"))))
 (defonce assert-statement (str/trim (slurp (io/resource "code/Assert.java"))))
 (defonce string-concat-statement (str/trim (slurp (io/resource "code/StringConcat.java"))))
+(defonce settings-block (str/trim (slurp (io/resource "code/Settings.java"))))
 
 (deftest ^:test-refresh/focus convert
 
@@ -110,10 +111,6 @@
     (is (= switch-output
            (convert-statement switch-statement))))
 
-  (testing "Can convert a string concat"
-    (is (= "(def ^String s (str \"Sum of \" a \" + \" b \" returned wrong sum \" result))"
-           (convert-statement string-concat-statement))))
-
   ;;(testing "Can correctly convert an assertion"
   ;;  (is (= "(assert nullsRemoved)"
   ;;         (convert-statement "assert nullsRemoved;")))
@@ -125,6 +122,14 @@
 #_(deftest ^:test-refresh/focus focused)
 
 (deftest next
+
+  (testing "Can convert a settings example"
+    (is (= ""
+           (convert-main settings-block))))
+
+  (testing "Can convert a string concat"
+    (is (= "(def ^String s (str \"Sum of \" a \" + \" b \" returned wrong sum \" result))"
+           (convert-statement string-concat-statement))))
 
   (testing "Can convert a binary expression"
     (is (= "(println \"Hello LWJGL\" (Version/getVersion) \"!\")"
