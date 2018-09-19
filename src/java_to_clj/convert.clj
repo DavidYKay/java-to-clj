@@ -2,11 +2,16 @@
   (:require
    [clojure.string :as str]
    [java-to-clj.protocols :refer [to-clj]]
-   [java-to-clj.parse :refer [parse-block parse-statement]]
+   [java-to-clj.parse :refer [parse-block parse-expression parse-statement]]
    [java-to-clj.expressions]
    [java-to-clj.statements]
    [java-to-clj.misc]
    ))
+
+(defn convert-expression [s]
+  (-> s
+      parse-expression
+      to-clj))
 
 (defn convert-statement [s]
   (-> s

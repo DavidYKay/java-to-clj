@@ -1,5 +1,5 @@
 (ns java-to-clj.convert-test
-  (:require [java-to-clj.convert :as sut :refer [convert-block convert-main convert-statement]]
+  (:require [java-to-clj.convert :as sut :refer [convert-block convert-expression convert-main convert-statement]]
             [java-to-clj.parse :refer [parse-block]]
             [clojure.java.io :as io]
             [clojure.test :as t :refer :all]
@@ -64,9 +64,16 @@
     (is (= "(make-array Vector3f 4)"
            (convert-statement "new Vector3f[4];"))))
 
-  (testing "Can correctly create an array"
-    (is (= "(make-array Vector3f 4 2)"
-           (convert-statement "new Vector3f[4][2];"))))
+  (testing "Can correctly convert a unary expression"
+    (is (= "(not readyToLaunch)"
+           (convert-expression "!readyToLaunch")))
+    (is (= "(bit-not 0)"
+           (convert-expression "~0")))
+    (is (= "(inc x)"
+           (convert-expression "x++")))
+    (is (= "(inc x)"
+           (convert-expression "++x")))
+    )
 
   )
 

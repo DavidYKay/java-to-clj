@@ -7,7 +7,6 @@
    [java.util Optional]
    ))
 
-
 (defn hello-parse []
   (let [hello-class "class A { }"
         ^CompilationUnit compilationUnit (JavaParser/parse hello-class)

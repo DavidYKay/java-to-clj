@@ -29,6 +29,7 @@
     ThisExpr
     TypeExpr
     UnaryExpr
+    UnaryExpr$Operator
     VariableDeclarationExpr
     BooleanLiteralExpr
     LiteralStringValueExpr
@@ -136,7 +137,21 @@
 
 (defmethod to-clj TypeExpr [e] :TypeExpr)
 
-(defmethod to-clj UnaryExpr [e] :UnaryExpr)
+(defmethod to-clj UnaryExpr [e]
+  (format "(%s %s)"
+          (to-clj (.getOperator e))
+          (to-clj (.getExpression e))))
+
+(defmethod to-clj UnaryExpr$Operator [e]
+  (condp = e
+    UnaryExpr$Operator/BITWISE_COMPLEMENT "bit-not"
+    UnaryExpr$Operator/LOGICAL_COMPLEMENT "not"
+    UnaryExpr$Operator/MINUS "-"
+    UnaryExpr$Operator/PLUS "int"
+    UnaryExpr$Operator/POSTFIX_DECREMENT "dec"
+    UnaryExpr$Operator/POSTFIX_INCREMENT "inc"
+    UnaryExpr$Operator/PREFIX_DECREMENT "dec"
+    UnaryExpr$Operator/PREFIX_INCREMENT "inc"))
 
 (defmethod to-clj VariableDeclarationExpr [e]
   (str/join " "
