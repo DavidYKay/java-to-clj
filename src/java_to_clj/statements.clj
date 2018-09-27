@@ -46,13 +46,13 @@
 (defmethod to-clj BreakStmt [s]
   "")
 
-(defmethod to-clj ContinueStmt [s] :CoStmtnil)
+(defmethod to-clj ContinueStmt [s] :ContinueStmt)
 
 (defmethod to-clj DoStmt [s] :DoStmt)
 
 (defmethod to-clj EmptyStmt [s] :EmptyStmt)
 
-(defmethod to-clj ExplicitConstructorInvocationStmt [s] :ExplicitCoInvocationStmtnil)
+(defmethod to-clj ExplicitConstructorInvocationStmt [s] :ExplicitConstructorInvocationStmt)
 
 (defmethod to-clj ExpressionStmt [s]
   (to-clj (.getExpression s)))
@@ -109,7 +109,7 @@
                (remove str/blank?)
                (str/join "\n  "))))
 
-(defmethod to-clj SynchronizedStmt [s] :SynhcronizedStmt)
+(defmethod to-clj SynchronizedStmt [s] :SynchronizedStmt)
 
 (defmethod to-clj ThrowStmt [s]
   (let [e (.getExpression s)]
