@@ -16,6 +16,8 @@
 (defonce assert-statement (str/trim (slurp (io/resource "code/Assert.java"))))
 (defonce string-concat-statement (str/trim (slurp (io/resource "code/StringConcat.java"))))
 (defonce settings-block (str/trim (slurp (io/resource "code/Settings.java"))))
+(defonce for-statement (str/trim (slurp (io/resource "code/For.java"))))
+(defonce for-each-statement (str/trim (slurp (io/resource "code/ForEach.java"))))
 
 (deftest ^:test-refresh/focus convert
 
@@ -118,6 +120,10 @@
   (testing "Can correctly convert a primitive array type"
     (is (= "(def normals (float-array [0 0 1 0 0 1 0 0 1 0 0 1]))"
            (convert-statement "normals = new float[]{0,0,1, 0,0,1, 0,0,1, 0,0,1};"))))
+
+  (testing "Can correctly convert a foreach statement"
+    (is (= ""
+           (convert-statement for-each-statement))))
 
   ;;"mesh.setBuffer(Type.Normal, 3, BufferUtils.createFloatBuffer(normals));"])
 

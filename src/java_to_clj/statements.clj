@@ -57,7 +57,11 @@
 (defmethod to-clj ExpressionStmt [s]
   (to-clj (.getExpression s)))
 
-(defmethod to-clj ForeachStmt [s] :ForeachStmt)
+(defmethod to-clj ForeachStmt [s]
+  (format "(for [%s %s]\n  %s"
+          (to-clj (.getVariable s))
+          (to-clj (.getIterable s))
+          (to-clj (.getBody s))))
 
 (defmethod to-clj ForStmt [s] :ForStmt)
 
