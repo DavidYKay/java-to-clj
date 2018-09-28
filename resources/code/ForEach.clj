@@ -1,2 +1,2 @@
 (for [^String item items]
-  (println item))
+  (Log/info item))
