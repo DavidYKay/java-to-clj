@@ -94,12 +94,9 @@
                       (println "component type: " (.getComponentType t))
                       :unknown-primitive))
                   (to-clj i))
-
           ;; Conventional init
           :default conventional-init
           ))
-
-      ;;:valueless-init
       ;; Valueless init
       (format "(def ^%s %s)"
               (to-clj t)

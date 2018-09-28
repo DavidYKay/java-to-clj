@@ -1,13 +1,12 @@
 (ns java-to-clj.statements
   (:require
    [java-to-clj.protocols :refer [to-clj]]
-
+   [java-to-clj.util :refer [non-def-variable]]
    [clojure.string :as str])
   (:import
    [com.github.javaparser JavaParser]
    [java.util Optional]
    [com.github.javaparser.ast
-    body.VariableDeclarator
     expr.Expression
     stmt.BlockStmt]
 
@@ -59,7 +58,11 @@
 
 (defmethod to-clj ForeachStmt [s]
   (format "(for [%s %s]\n  %s"
-          (to-clj (.getVariable s))
+          (non-def-variable
+           (-> s
+               .getVariable
+               .getVariables
+               first))
           (to-clj (.getIterable s))
           (to-clj (.getBody s))))
 

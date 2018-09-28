@@ -18,6 +18,7 @@
 (defonce settings-block (str/trim (slurp (io/resource "code/Settings.java"))))
 (defonce for-statement (str/trim (slurp (io/resource "code/For.java"))))
 (defonce for-each-statement (str/trim (slurp (io/resource "code/ForEach.java"))))
+(defonce for-each-statement-clj (str/trim (slurp (io/resource "code/ForEach.clj"))))
 
 (deftest ^:test-refresh/focus convert
 
@@ -122,7 +123,7 @@
            (convert-statement "normals = new float[]{0,0,1, 0,0,1, 0,0,1, 0,0,1};"))))
 
   (testing "Can correctly convert a foreach statement"
-    (is (= ""
+    (is (= for-each-statement-clj
            (convert-statement for-each-statement))))
 
   ;;"mesh.setBuffer(Type.Normal, 3, BufferUtils.createFloatBuffer(normals));"])
