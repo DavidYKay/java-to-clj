@@ -16,6 +16,9 @@
 (defonce assert-statement (str/trim (slurp (io/resource "code/Assert.java"))))
 (defonce string-concat-statement (str/trim (slurp (io/resource "code/StringConcat.java"))))
 (defonce settings-block (str/trim (slurp (io/resource "code/Settings.java"))))
+(defonce for-statement (str/trim (slurp (io/resource "code/For.java"))))
+(defonce for-each-statement (str/trim (slurp (io/resource "code/ForEach.java"))))
+(defonce for-each-statement-clj (str/trim (slurp (io/resource "code/ForEach.clj"))))
 
 (deftest ^:test-refresh/focus convert
 
@@ -112,12 +115,28 @@
            (convert-statement switch-statement))))
 
   (testing "Can correctly convert a primitive"
-     (is (= "(def ^float[] normals (make-array float 12))"
-            (convert-statement "float[] normals = new float[12];"))))
+    (is (= "(def ^float[] normals (make-array float 12))"
+           (convert-statement "float[] normals = new float[12];"))))
 
   (testing "Can correctly convert a primitive array type"
     (is (= "(def normals (float-array [0 0 1 0 0 1 0 0 1 0 0 1]))"
            (convert-statement "normals = new float[]{0,0,1, 0,0,1, 0,0,1, 0,0,1};"))))
+
+  (testing "Can correctly convert a method call to 'this'"
+    (is (= "(.doIt this x)"
+           (convert-statement "doIt(x);"))))
+
+  (testing "Can correctly convert a method call"
+    (is (= "(.accelerate car speed)"
+           (convert-statement "car.accelerate(speed);"))))
+
+  (testing "Can correctly convert a static method call"
+    (is (= "(Log/info item)"
+           (convert-statement "Log.info(item);"))))
+
+  (testing "Can correctly convert a foreach statement"
+    (is (= for-each-statement-clj
+           (convert-statement for-each-statement))))
 
   ;;"mesh.setBuffer(Type.Normal, 3, BufferUtils.createFloatBuffer(normals));"])
 

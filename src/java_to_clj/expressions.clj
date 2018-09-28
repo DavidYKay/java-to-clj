@@ -192,12 +192,18 @@
   (let [s (-> e .getScope)
         n (.getName e)
         args (->> (.getArguments e)
-                  (map to-clj))
-        args (if (.isPresent s)
-               (conj args (to-clj (.get s)))
-               args)]
-    (format "(.%s %s)" n
-            (str/join " " args))))
+                  (map to-clj))]
+    (if (and (.isPresent s)
+             (Character/isUpperCase (first (to-clj (.get s)))))
+      (format "(%s/%s %s)"
+              (to-clj (.get s))
+              (to-clj n)
+              (str/join " " args))
+      (format "(.%s %s)"
+              (to-clj n)
+              (str/join " " (if (.isPresent s)
+                              (conj args (to-clj (.get s)))
+                              (conj args "this")))))))
 
 (defmethod to-clj MethodReferenceExpr [e] :MethodReferenceExpr)
 
