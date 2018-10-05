@@ -6,12 +6,13 @@
     ArrayCreationLevel
     body.VariableDeclarator
     body.Parameter
-    expr.SimpleName
     comments.Comment
+    stmt.CatchClause
     ]
    [com.github.javaparser.ast.expr
     ArrayCreationExpr
-    ArrayInitializerExpr]
+    ArrayInitializerExpr
+    SimpleName ]
    [com.github.javaparser.ast.type
     ArrayType
     ClassOrInterfaceType
@@ -102,3 +103,9 @@
               (to-clj t)
               (to-clj n)))))
 
+(defmethod to-clj CatchClause [c]
+  (let [p (.getParameter c)]
+    (format "(catch %s %s\n %s)"
+            (.getType p)
+            (.getName p)
+            (to-clj (.getBody c)))))

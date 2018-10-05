@@ -125,14 +125,22 @@
             (to-clj e))))
 
 (defmethod to-clj TryStmt [s]
-  ;; NodeList<CatchClause> 	getCatchClauses()
-  ;; Optional<BlockStmt> 	getFinallyBlock()
-  ;; TryStmtMetaModel 	getMetaModel()
-  ;; NodeList<Expression> 	getResources()
-
-  :TryStmt
-
-  )
+  (let [f (.getFinallyBlock s)
+        c (.getCatchClauses s)
+        r (.getResources s)
+        t (.getTryBlock s)
+        cs  (->> c
+                 (map to-clj)
+                 (str/join "\n"))]
+    (if (.isPresent f)
+      (format "(try %s %s %s)"
+              (to-clj t)
+              cs
+              (format "(finally %s)"
+                      (to-clj (.get f))))
+      (format "(try %s %s)"
+              (to-clj t)
+              cs))))
 
 (defmethod to-clj UnparsableStmt [s] :UnparsableStmt)
 

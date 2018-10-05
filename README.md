@@ -19,12 +19,12 @@ Please file a ticket if you'd like me to hurry up and implement one of the below
 ## TODO
 
 * Try / catch
+* For
+* ForEach with Lambda
 * class
 * while
 * continue
 * do
-* For
-* ForEach with Lambda
 * Super
 * Local class declaration
 * Method Reference

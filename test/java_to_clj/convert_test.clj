@@ -19,8 +19,12 @@
 (defonce for-statement (str/trim (slurp (io/resource "code/For.java"))))
 (defonce for-each-statement (str/trim (slurp (io/resource "code/ForEach.java"))))
 (defonce for-each-statement-clj (str/trim (slurp (io/resource "code/ForEach.clj"))))
+(defonce try-statement (str/trim (slurp (io/resource "code/Try.java"))))
+(defonce try-statement-clj (str/trim (slurp (io/resource "code/Try.clj"))))
 
-(deftest ^:test-refresh/focus convert
+(deftest
+  ;;^:test-refresh/focus
+  convert
 
   (testing "Can convert the first line of the block"
     (is (= "(def ^Geometry coloredMesh (Geometry. \"ColoredMesh\" cMesh))"
@@ -40,7 +44,7 @@
 
   (testing
       "Can initialize a Java array"
-    (is (= "(def ^int[] indexes (int-array [2 0 1 1 3 2]))"
+    (is (= "(def ^int [] indexes (int-array [2 0 1 1 3 2]))"
            (convert-statement "int [] indexes = { 2,0,1, 1,3,2 };"))))
 
   (testing "Can convert a throw statement"
@@ -115,7 +119,7 @@
            (convert-statement switch-statement))))
 
   (testing "Can correctly convert a primitive"
-    (is (= "(def ^float[] normals (make-array float 12))"
+    (is (= "(def ^float [] normals (make-array float 12))"
            (convert-statement "float[] normals = new float[12];"))))
 
   (testing "Can correctly convert a primitive array type"
@@ -138,6 +142,8 @@
     (is (= for-each-statement-clj
            (convert-statement for-each-statement))))
 
+
+
   ;;"mesh.setBuffer(Type.Normal, 3, BufferUtils.createFloatBuffer(normals));"])
 
   ;;(testing "Can correctly convert an assertion"
@@ -148,7 +154,12 @@
 
   )
 
-#_(deftest ^:test-refresh/focus focused)
+(deftest ^:test-refresh/focus focused
+
+    (testing "Can correctly convert a try statement"
+    (is (= try-statement-clj
+           (convert-statement try-statement))))
+    )
 
 (deftest next
 

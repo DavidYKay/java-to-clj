@@ -6,6 +6,8 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [com.github.javaparser/javaparser-core "3.6.20"]
 
+                 [cljfmt "0.6.1"]
+
                  ;; Web UI
                  [compojure "1.6.1"]
                  [hiccup "1.0.5"]]
