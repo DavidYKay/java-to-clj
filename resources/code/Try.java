@@ -3,7 +3,7 @@ try {
 } catch (IOException e) {
     e.printStackTrace();
 } catch (SQLException se) {
-    e.printStackTrace();
+    se.printStackTrace();
 } finally {
     bw.close();
 }

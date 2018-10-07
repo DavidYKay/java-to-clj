@@ -1,6 +1,5 @@
 (ns java-to-clj.convert-test
-  (:require [java-to-clj.convert :as sut :refer [convert-block convert-expression convert-main convert-statement]]
-            [java-to-clj.parse :refer [parse-block]]
+  (:require [java-to-clj.convert :as sut :refer [convert-block convert-expression convert-main convert-statement]] [java-to-clj.parse :refer [parse-block]]
             [clojure.java.io :as io]
             [clojure.test :as t :refer :all]
             [clojure.string :as str]))
@@ -21,6 +20,35 @@
 (defonce for-each-statement-clj (str/trim (slurp (io/resource "code/ForEach.clj"))))
 (defonce try-statement (str/trim (slurp (io/resource "code/Try.java"))))
 (defonce try-statement-clj (str/trim (slurp (io/resource "code/Try.clj"))))
+
+
+(def try-catch-with-resource (str/trim (slurp (io/resource "code/TryCatchWithResource.java"))))
+(def try-catch-with-resource-clj (str/trim (slurp (io/resource "code/TryCatchWithResource.clj"))))
+
+(def try-with-resource (str/trim (slurp (io/resource "code/TryWithResource.java"))))
+(def try-with-resource-clj (str/trim (slurp (io/resource "code/TryWithResource.clj"))))
+
+(defn collapse-whitespace [s]
+  (str/replace s #"(\s+)|(\n)" " "))
+
+(defn str= [& args]
+  (apply =
+         (->> args
+              (map collapse-whitespace))))
+
+(deftest
+  ;;^:test-refresh/focus
+  can-collapse-whitespace
+
+  (testing "Can collapse whitespace"
+    (is (= "hello world"
+           (collapse-whitespace "hello\nworld")))
+
+    (is (= "hello world"
+           (collapse-whitespace "hello  world")))
+
+    (is (= "hello world"
+           (collapse-whitespace "hello world")))))
 
 (deftest
   ;;^:test-refresh/focus
@@ -142,8 +170,6 @@
     (is (= for-each-statement-clj
            (convert-statement for-each-statement))))
 
-
-
   ;;"mesh.setBuffer(Type.Normal, 3, BufferUtils.createFloatBuffer(normals));"])
 
   ;;(testing "Can correctly convert an assertion"
@@ -154,11 +180,30 @@
 
   )
 
-(deftest ^:test-refresh/focus focused
+#_(try
+  (let [^MemoryStack stack (.stackPush)])
+  (.mallocInt stack 1)
+  (.write bw content)
+  (catch IOException e
+    (.printStackTrace e))
+  (finally
+    (.close stack)))
 
-    (testing "Can correctly convert a try statement"
-    (is (= try-statement-clj
-           (convert-statement try-statement))))
+(deftest
+  ^:test-refresh/focus
+  focused
+  #_(testing "Can correctly convert a try statement"
+    (is (str=
+          try-statement-clj
+          (convert-statement try-statement))))
+
+  (testing "Can correctly convert a try catch w/ resource statement"
+    (is (str= try-catch-with-resource-clj
+           (convert-statement try-catch-with-resource))))
+
+    (testing "Can correctly convert a try-with-resource statement"
+      (is (str= try-with-resource-clj
+             (convert-statement try-with-resource))))
     )
 
 (deftest next

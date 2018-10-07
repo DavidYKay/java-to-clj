@@ -127,20 +127,37 @@
 (defmethod to-clj TryStmt [s]
   (let [f (.getFinallyBlock s)
         c (.getCatchClauses s)
-        r (.getResources s)
         t (.getTryBlock s)
+        r (.getResources s)
+        has-resources? (not (empty? r))
         cs  (->> c
                  (map to-clj)
-                 (str/join "\n"))]
-    (if (.isPresent f)
-      (format "(try %s %s %s)"
-              (to-clj t)
-              cs
-              (format "(finally %s)"
-                      (to-clj (.get f))))
-      (format "(try %s %s)"
-              (to-clj t)
-              cs))))
+                 (str/join "\n"))
+        has-catch? (not (empty? c))
+        let-resources (if has-resources?
+                        "(let [^MemoryStack stack (.stackPush)]"
+                        nil)
+        close-resources (if has-resources?
+                          "(.close stack)"
+                          nil)
+        components (remove nil?
+                           [(if has-catch? "(try" nil)
+                            let-resources
+                            (to-clj t)
+                            cs
+                            (cond
+                              (and (.isPresent f) has-resources?)       (format "(finally %s %s)" (to-clj (.get f)) close-resources)
+                              (and (.isPresent f) (not has-resources?)) (format "(finally %s)" (to-clj (.get f)))
+                              (and (not (.isPresent f))
+                                   has-catch?
+                                   has-resources?) (format "(finally %s)" close-resources)
+                              (and (not (.isPresent f)) has-resources?) (format "%s" close-resources)
+
+                              (and (not (.isPresent f)) (not has-resources?)) nil)
+                            (if has-catch?
+                            "))"
+                            ")")])]
+    (str/join " " components)))
 
 (defmethod to-clj UnparsableStmt [s] :UnparsableStmt)
 
