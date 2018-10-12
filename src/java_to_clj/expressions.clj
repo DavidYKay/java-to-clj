@@ -193,17 +193,18 @@
         n (.getName e)
         args (->> (.getArguments e)
                   (map to-clj))]
-    (if (and (.isPresent s)
-             (Character/isUpperCase (first (to-clj (.get s)))))
-      (format "(%s/%s %s)"
-              (to-clj (.get s))
-              (to-clj n)
-              (str/join " " args))
-      (format "(.%s %s)"
-              (to-clj n)
-              (str/join " " (if (.isPresent s)
-                              (conj args (to-clj (.get s)))
-                              (conj args "this")))))))
+    (cond
+      (= (to-clj n) "println")                                (format "(%s %s)" n (str/join " " args))
+      (and (.isPresent s)
+           (Character/isUpperCase (first (to-clj (.get s))))) (format "(%s/%s %s)"
+                                                                      (to-clj (.get s))
+                                                                      (to-clj n)
+                                                                      (str/join " " args))
+      :else (format "(.%s %s)"
+                    (to-clj n)
+                    (str/join " " (if (.isPresent s)
+                                    (conj args (to-clj (.get s)))
+                                    (conj args "this")))))))
 
 (defmethod to-clj MethodReferenceExpr [e] :MethodReferenceExpr)
 

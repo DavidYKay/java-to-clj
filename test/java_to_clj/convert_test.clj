@@ -22,11 +22,14 @@
 (defonce try-statement-clj (str/trim (slurp (io/resource "code/Try.clj"))))
 
 
-(def try-catch-with-resource (str/trim (slurp (io/resource "code/TryCatchWithResource.java"))))
-(def try-catch-with-resource-clj (str/trim (slurp (io/resource "code/TryCatchWithResource.clj"))))
+(defonce try-catch-with-resource (str/trim (slurp (io/resource "code/TryCatchWithResource.java"))))
+(defonce try-catch-with-resource-clj (str/trim (slurp (io/resource "code/TryCatchWithResource.clj"))))
 
-(def try-with-resource (str/trim (slurp (io/resource "code/TryWithResource.java"))))
-(def try-with-resource-clj (str/trim (slurp (io/resource "code/TryWithResource.clj"))))
+(defonce try-with-resource (str/trim (slurp (io/resource "code/TryWithResource.java"))))
+(defonce try-with-resource-clj (str/trim (slurp (io/resource "code/TryWithResource.clj"))))
+
+(defonce while-loop (str/trim (slurp (io/resource "code/While.java"))))
+(defonce while-loop-clj (str/trim (slurp (io/resource "code/While.clj"))))
 
 (defn collapse-whitespace [s]
   (str/replace s #"(\s+)|(\n)" " "))
@@ -170,6 +173,20 @@
     (is (= for-each-statement-clj
            (convert-statement for-each-statement))))
 
+(testing "Can correctly convert a try statement"
+    (is (str=
+          try-statement-clj
+          (convert-statement try-statement))))
+
+  (testing "Can correctly convert a try catch w/ resource statement"
+    (is (str= try-catch-with-resource-clj
+           (convert-statement try-catch-with-resource))))
+
+    (testing "Can correctly convert a try-with-resource statement"
+      (is (str= try-with-resource-clj
+             (convert-statement try-with-resource))))
+
+
   ;;"mesh.setBuffer(Type.Normal, 3, BufferUtils.createFloatBuffer(normals));"])
 
   ;;(testing "Can correctly convert an assertion"
@@ -192,14 +209,11 @@
 (deftest
   ^:test-refresh/focus
   focused
-  #_(testing "Can correctly convert a try statement"
-    (is (str=
-          try-statement-clj
-          (convert-statement try-statement))))
 
-  (testing "Can correctly convert a try catch w/ resource statement"
-    (is (str= try-catch-with-resource-clj
-           (convert-statement try-catch-with-resource))))
+  (testing "Can correctly convert System.out.println"
+    (is (str= "(println \"hello world\")"
+          (convert-statement "System.out.println(\"hello world\");")))
+    )
 
     (testing "Can correctly convert a try-with-resource statement"
       (is (str= try-with-resource-clj
