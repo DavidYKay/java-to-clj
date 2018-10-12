@@ -18,17 +18,19 @@ Please file a ticket if you'd like me to hurry up and implement one of the below
 
 ## TODO
 
-* Try / catch
+* Increment
 * For
 * ForEach with Lambda
 * class
-* while
 * continue
 * do
 * Super
 * Local class declaration
 * Method Reference
 * Deploy to Heroku/similar
+* Log Exceptions
+* Button for "this was a poor translation"
+* while - mutable increment?
 * Labels?
 * Synchronized?
 * Annotations?

@@ -215,9 +215,9 @@
           (convert-statement "System.out.println(\"hello world\");")))
     )
 
-    (testing "Can correctly convert a try-with-resource statement"
-      (is (str= try-with-resource-clj
-             (convert-statement try-with-resource))))
+    (testing "Can correctly convert a while loop"
+      (is (str= while-loop-clj
+             (convert-statement while-loop))))
     )
 
 (deftest next

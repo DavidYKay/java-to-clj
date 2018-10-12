@@ -161,5 +161,8 @@
 
 (defmethod to-clj UnparsableStmt [s] :UnparsableStmt)
 
-(defmethod to-clj WhileStmt [s] :WhileStmt)
+(defmethod to-clj WhileStmt [s]
+  (format "(while %s %s)"
+          (to-clj (.getCondition s))
+          (to-clj (.getBody s))))
 
