@@ -18,6 +18,7 @@ Please file a ticket if you'd like me to hurry up and implement one of the below
 
 ## TODO
 
+* Anonymous class declaration - reify
 * Increment
 * For
 * ForEach with Lambda
@@ -25,7 +26,6 @@ Please file a ticket if you'd like me to hurry up and implement one of the below
 * continue
 * do
 * Super
-* Local class declaration
 * Method Reference
 * Deploy to Heroku/similar
 * Log Exceptions
